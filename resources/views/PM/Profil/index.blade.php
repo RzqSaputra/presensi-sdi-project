@@ -15,7 +15,6 @@
         @include('template.navbar')
         <!-- End Navbar -->
 
-
         <!-- Body -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -23,7 +22,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <!-- Gambar Profil -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <a href="{{ asset('FotoProfile/' . $presensi->karyawan->foto) }}">
                             <div class="bg-secondary text-center card-img-top"
                                 style="height: 400px; display: flex; align-items: center; justify-content: center;">
                                 <img id="profileImage" src="{{ asset('FotoProfile/' . $presensi->karyawan->foto) }}"
@@ -52,7 +51,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- Form untuk mengunggah gambar -->
-                                <form action="{{ route('image.upload') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('profilPM.image') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-3">
                                         <input type="file" name="image" class="form-control" id="imageInput">
@@ -244,7 +243,7 @@
                                 <div class="col">
                                     <button class="btn btn-primary btn-sm" id="editButton">Edit</button>
                                 </div>
-                                <form action="{{route('profile.update')}}" method="POST">
+                                <form action="{{route('profilPM.update')}}" method="POST">
                                     @csrf
                                     <div class="col-auto">
                                         <div id="editButtons" style="display: none;">
@@ -390,7 +389,7 @@
                         @elseif($title === 'Profile Project Manager')
 
                         <div class="modal-body">
-                            <form action="{{ route('profile.updatePassword') }}" method="POST"
+                            <form action="{{ route('profilPM.password') }}" method="POST"
                                 onsubmit="return validatePassword()">
                                 @csrf
                                 <div class='mb-3'>

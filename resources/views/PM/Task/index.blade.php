@@ -113,9 +113,9 @@
                                                 </div>
                                             </td>
 
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0 text-center ">
-                                                    {{ $p->user->karyawan->nama ?? 'N/A' }}</p>
+                                            <td class="align-middle text-center text-sm">
+                                                <span
+                                                    class="text-xs font-weight-bold mb-0">{{$p->user->karyawan->nama??'N/A'}}</span>
                                             </td>
 
                                             <td class="align-middle text-center text-sm">
@@ -170,132 +170,114 @@
                                                 </span>
                                                 @endif
                                             </td>
-
                                             <td class="align-middle text-center">
-                                                <a href="{{ route('taskKaryawan.update', ['id' => $p->id]) }}">
-                                                    <button class="btn btn-primary">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </a>
-                                                {{-- <a href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#deletePegawai-{{ $p->id }}">
-                                                    <button class="btn btn-danger">
-                                                        <i class="fa fa-info"></i>
-                                                    </button>
-                                                </a> --}}
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#staticBackdrop-{{$p->id}}">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                         @endforeach
                                         @endif
                                     </tbody>
                                 </table>
-                                {{-- <div class="px-3 page d-flex justify-content-between">
-                                    <small style="font-weight: bold">
-                                        Showing {{ $karyawan->count() }} of {{ $karyawan->total() }} entries
-                                </small>
-                                {{ $karyawan->links('pagination::bootstrap-4') }}
-                            </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{----------------------------------------- E N D  - V I E W -----------------------------------------}}
+
+
+                {{-- ----------------------------------------- S T A R T - E D I T -----------------------------------------}}
+
+                @foreach($task as $p)
+                <div class="modal fade" id="staticBackdrop-{{$p->id}}" data-bs-backdrop="static"
+                    data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Task Karyawan</h5>
+                                <button type="button" class="btn-close bg-danger mx-1" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class='mb-3'>
+                                    <label for="nama" class="form-label">Nama</label>
+                                    <input type="text" name="nama" id="nama" class="form-control" disabled
+                                        value="{{ old('nama') ?? optional($p->user->karyawan)->nama }}">
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="judul" class="form-label">Judul</label>
+                                    <input type="text" name="judul" id="judul" class="form-control" required
+                                        value="{{ old('judul') ?? optional($p)->judul }}">
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi" class="form-control" required>{{ old('deskripsi') ?? optional($p)->deskripsi }}
+                                    </textarea>
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="tgl_task" class="form-label">Tanggal</label>
+                                    <input type="date" name="tgl_task" id="tgl_task" class="form-control" required
+                                        value="{{ old('tgl_task') ?? optional($p)->tgl_task }}">
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
+                                    <input type="time" name="waktu_mulai" id="waktu_mulai" class="form-control" required
+                                        value="{{ old('waktu_mulai') ?? optional($p)->waktu_mulai }}">
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="waktu_selesai" class="form-label">Waktu Selesai</label>
+                                    <input type="time" name="waktu_selesai" id="waktu_selesai" class="form-control"
+                                        required value="{{ old('waktu_selesai') ?? optional($p)->waktu_selesai }}">
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="status" class="form-label">Status</label>
+                                    <input type="text" name="status" id="status" class="form-control" disabled
+                                        value="{{ old('status') ?? optional($p)->status }}">
+                                </div>
+                                <div class='mb-3'>
+                                    <label for="status" class="form-label">Foto Task</label>
+                                    <img src="{{ asset('FotoProfile/' . optional($p)->foto) }}" alt="Foto Task"
+                                        class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+                {{-- ------------------------------------------- E N D - E D I T -------------------------------------------}}
+
+
+                {{-------------------------------------- D E L E T E --------------------------------------}}
+                {{-- @foreach($task as $p)
+            <div class="modal fade" id="deleteDataPresensi-{{ $p->id }}"
+                aria-labelledby="exampleModalLabel{{ $p->id }}"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="padding: 15px">
+                        <div class="modal-body">Hapus data {{$p->user->karyawan->nama}} ?</div>
+                        <div style="margin-right: 10px;">
+                            <a class="btn btn-danger" href="dataPresensi/delete/{{ $p->id }}"
+                                style="float: right">Hapus</a>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{----------------------------------------- E N D  - V I E W -----------------------------------------}}
-
-
-            {{-- ----------------------------------------- S T A R T - A D D -----------------------------------------}}
-
-            {{-- <div class="modal fade" id="addPresensiModal" aria-labelledby="addPresensiLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addPresensiLabel">Presensi Manual</h5>
-                        <button class="btn-close bg-danger" type="button" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('presensi.createPresensiManual') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="user_id" class="form-label">Nama Karyawan</label>
-                <select name="user_id" id="user_id" class="form-select" required>
-                    <option value="">Pilih Nama Karyawan</option>
-                    @foreach ($user->where('id', '>', 2) as $p)
-                    <option value="{{ $p->id }}">{{ $p->karyawan->nama }}</option>
-                    @endforeach
-                </select>
-                <div id="user_idError" class="invalid-feedback"></div>
-            </div>
-
-            <div class="mb-3">
-                <label for="tgl_presensi" class="form-label">Tanggal Presensi</label>
-                <input type="date" name="tgl_presensi" id="tgl_presensi" class="form-control" required>
-                <div id="tgl_presensiError" class="invalid-feedback"></div>
-            </div>
-
-            <div class="mb-3">
-                <label for="jam_masuk" class="form-label">Jam Masuk</label>
-                <input type="time" name="jam_masuk" id="jam_masuk" class="form-control" required>
-                <div id="jam_masukError" class="invalid-feedback"></div>
-            </div>
-
-            <div class="mb-3">
-                <label for="jam_pulang" class="form-label">Jam Pulang</label>
-                <input type="time" name="jam_pulang" id="jam_pulang" class="form-control" required>
-                <div id="jam_pulangError" class="invalid-feedback"></div>
-            </div>
-
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-control" required>
-                    <option value="">Status</option>
-                    <option value="1">Masuk</option>
-                    <option value="2">izin</option>
-                    <option value="3">Sakit</option>
-                </select>
-                <div id="statusError" class="invalid-feedback"></div>
-            </div>
-
-            <div class="mb-3">
-                <label for="ket" class="form-label">Keterangan</label>
-                <input type="text" name="ket" id="ket" class="form-control" required>
-                <div id="ketError" class="invalid-feedback"></div>
-            </div>
-
-            <div style="float: right">
-                <button type="submit" class="btn btn-primary mb-2">Tambah</button>
-            </div>
-            </form>
-        </div>
-        </div>
-        </div>
-        </div> --}}
+            @endforeach --}}
 
 
-        {{-- ------------------------------------------- E N D - A D D -------------------------------------------}}
+            {{----------------------------------- E N D - D E L E T E --------------------------------------}}
 
-
-        {{-------------------------------------- D E L E T E --------------------------------------}}
-        @foreach($task as $p)
-        <div class="modal fade" id="deleteDataPresensi-{{ $p->id }}" aria-labelledby="exampleModalLabel{{ $p->id }}"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="padding: 15px">
-                    <div class="modal-body">Hapus data {{$p->user->karyawan->nama}} ?</div>
-                    <div style="margin-right: 10px;">
-                        <a class="btn btn-danger" href="dataPresensi/delete/{{ $p->id }}" style="float: right">Hapus</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
-
-
-        {{----------------------------------- E N D - D E L E T E --------------------------------------}}
-
-        <!-- Footer -->
-        @include('template.footer')
-        {{-- End Footer --}}
+            <!-- Footer -->
+            @include('template.footer')
+            {{-- End Footer --}}
 
         </div>
     </main>
@@ -323,7 +305,7 @@
             var inputNama = $(this).val().toLowerCase();
 
             $('#dataabsensi tbody tr').each(function () {
-                var nama = $(this).find('td:eq(3)').text().toLowerCase();
+                var nama = $(this).find('td:eq(2)').text().toLowerCase();
 
                 if (nama.includes(inputNama)) {
                     $(this).show();

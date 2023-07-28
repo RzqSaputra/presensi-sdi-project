@@ -125,9 +125,10 @@ Route::group(['middleware' => ['pm']], function(){
 
      /* ---------------------------------------- R O U T E - P R O F I L  ---------------------------------------- */
     Route::prefix('profilPM')->group(function() {
-        Route::get ('profil',  'ProfilPMController@index')->name('profilPM');
-        Route::post('update',  'ProfilPMController@update')->name('profile.update');
-        Route::post('profil/updatePassword',            [ProjectManagerController::class, 'updatePassword'])->name('profile.updatePassword');
-        Route::post('image/upload',                     [ProjectManagerController::class, 'upload'])->name('image.upload');
+        Route::get ('profil',        'ProfilPMController@index')->name('profilPM');
+        Route::post('update',        'ProfilPMController@update')->name('profilPM.update');
+        Route::post('password',      'ProfilPMController@password')->name('profilPM.password');
+        Route::post('image/upload',  'ProfilPMController@image')->name('profilPM.image');
     });
+    
 });

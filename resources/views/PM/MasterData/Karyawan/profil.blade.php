@@ -22,7 +22,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <!-- Gambar Profil -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <a href="{{ asset('FotoProfile/' . $presensi->karyawan->foto) }}">
                             <div class="bg-secondary text-center card-img-top"
                                 style="height: 400px; display: flex; align-items: center; justify-content: center;">
                                 <img id="profileImage" src="{{ asset('FotoProfile/' . $presensi->karyawan->foto) }}"

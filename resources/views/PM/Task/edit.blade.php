@@ -29,13 +29,55 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Nama</label>
-                                        <input name="alamat" id="alamat" class="form-control" type="text"
-                                            value="">
+                                        <input name="nama" id="nama" class="form-control" type="text"
+                                            value="{{$task->user->karyawan->nama}}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="example-text-input" class="form-control-label">Nama</label>
+                                        <label for="example-text-input" class="form-control-label">Judul</label>
+                                        <input name="alamat" id="alamat" class="form-control" type="text"
+                                            value="{{$task->judul}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Deskripsi</label>
+                                        <input name="alamat" id="alamat" class="form-control" type="text"
+                                            value="{{$task->deskripsi}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Tanggal</label>
+                                        <input name="alamat" id="alamat" class="form-control" type="text"
+                                            value="{{$task->tgl_task}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Waktu Mulai</label>
+                                        <input name="alamat" id="alamat" class="form-control" type="text"
+                                            value="{{$task->waktu_mulai}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Waktu Selesai</label>
+                                        <input name="alamat" id="alamat" class="form-control" type="text"
+                                            value="{{$task->waktu_selesai}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Status</label>
+                                        <input name="alamat" id="alamat" class="form-control" type="text"
+                                            value="{{$task->status}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Foto</label>
                                         <input name="alamat" id="alamat" class="form-control" type="text"
                                             value="">
                                     </div>

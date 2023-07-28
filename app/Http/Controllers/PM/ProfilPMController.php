@@ -50,4 +50,42 @@ class ProfilPMController extends Controller
         return redirect()->route('profilPM');
     }
 
+    public function password(Request $request)
+    {
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        session()->flash('pesan', "Perubahan Password berhasil");
+        return redirect()->route('profilPM');
+    }
+
+    public function image(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            
+            $image = $request->file('image'); // Mengambil file gambar dari form upload
+            $imageName = time() . '.' . $image->getClientOriginalExtension();  // Generate nama unik untuk gambar berdasarkan timestamp
+            $image->move(public_path('FotoProfile'), $imageName);  // Memindahkan file gambar ke folder yang diinginkan
+
+            
+            $user_id = Auth::id(); // Mendapatkan ID pengguna yang sedang terautentikasi
+            $karyawan = Karyawan::where('user_id', $user_id)->first(); // Mencari data Karyawan yang sesuai dengan user_id terautentikasi
+
+            // Jika data Karyawan ditemukan, perbarui field foto
+            if ($karyawan) {
+                $karyawan->foto = $imageName;
+                $karyawan->save();
+            }
+        }
+        return redirect()->back()->with('pesan', 'Gambar berhasil diunggah.');
+    }
+
 }
