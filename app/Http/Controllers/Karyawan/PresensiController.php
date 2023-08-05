@@ -1,18 +1,36 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Karyawan;
 
-use App\Models\Pegawai;
-use App\Models\Presensi;
-use App\Models\Outlet;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Presensi;
+use App\Models\Karyawan;
+use Carbon\Carbon;
 
 class PresensiController extends Controller
 {
-    public function masuk(Request $request, Outlet $outlet)
+    public function __construct()
+    {
+        $this->middleware('karyawan');
+    }
+
+    public function index()
+    {
+        $today = Carbon::now()->toDateString();
+        $presensi = Presensi::where('user_id', Auth::user()->id)->where('tgl_presensi', $today)->first();
+        $status = $presensi->status ?? "status";
+        return view('Karyawan.Presensi.index')->with([
+            'title' => 'Presensi',
+            'presensi' => $presensi,
+            'status' => $status,
+        ]);
+    }
+
+
+    public function masuk(Request $request)
     {
         $img = $request->image;
         $folderPath = "presensi/masuk-";
@@ -26,10 +44,10 @@ class PresensiController extends Controller
 
         $file = $folderPath . $fileName;
         Storage::put($file, $image_base64);
-        $status = "Hadir";
+        $status = 1;
 
         if ($request->izin) {
-            $status = "Izin";
+            $status = 2;
         }
         
         $lokasi = $request->lokasi;
@@ -44,8 +62,10 @@ class PresensiController extends Controller
             'ket' => $request->ket,
         ];
         Presensi::create($data);
-        return redirect(route('pegawai.presensi'));
+        return redirect(route('presensi.karyawan'));
     }
+
+
     public function pulang(Request $request, Presensi $presensi)
     {
         $img = $request->image;
@@ -69,6 +89,7 @@ class PresensiController extends Controller
             'foto_pulang' => $fileName,
             'lokasi_pulang' => $lokasi,
         ]);
-        return redirect(route('pegawai.presensi'));
+        return redirect(route('presensi.karyawan'));
     }
+
 }

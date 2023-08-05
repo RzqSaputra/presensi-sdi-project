@@ -8,7 +8,7 @@
                     {{ str_replace('.', ' ', Route::currentRouteName()) }}</li>
             </ol>
             <h6 class="font-weight-bolder text-white text-capitalize mb-0">
-                {{ str_replace('.', ' ', Route::currentRouteName()) }}</h6>
+                {{ str_replace('.', ' ',  Route::currentRouteName()) }}</h6>
         </nav>
     </div>
     <div class="container-fluid py-1 px-3 justify-content-end">

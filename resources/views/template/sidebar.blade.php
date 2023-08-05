@@ -23,51 +23,37 @@
             @if (Auth::user()->jabatan_id == 3)
             {{-- Karyawan Menu --}}
             <li class="nav-item">
-                <a class="nav-link" href="/presensi">
+                <a class="nav-link" href="{{route('presensi.karyawan')}}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-badge text-primary text-sm opacity-10"></i>
+                        <i class="ni ni-badge text-warning text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Presensi</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a style="cursor:pointer;" class="nav-link" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-expanded="false" aria-controls="collapseTwo">
+                <a class="nav-link" href="{{route('riwayatPresensi')}}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-badge text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Riwayat Presensi</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('task')}}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-collection text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Task</span>
                 </a>
-                <ul class="collapse flex-column ms-1" style="list-style: none; margin-top:-10px;" id="collapseTwo"
-                    data-bs-parent="#menu">
-                    <li class="nav-item" style="margin-left: -30px">
-                        <a class="nav-link" href="/task">
-                            <div
-                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-single-copy-04 text-primary text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Task Harian</span>
-                        </a>
-                    </li>
-                    <li style="margin-left: -30px; margin-top:-10px;">
-                        <a class="nav-link" href="/taskMingguan">
-                            <div
-                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                                <i class="ni ni-single-copy-04 text-primary text-sm opacity-10"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Task Mingguan</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
-            <li class="mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Akun</h6>
-            </li>
+
             <li class="nav-item">
-                <a class="nav-link " href="/profil">
+                <a class="nav-link " href="{{route('profilKaryawan')}}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-single-02 text-info text-sm opacity-10"></i>

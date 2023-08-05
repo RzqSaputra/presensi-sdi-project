@@ -51,11 +51,11 @@
                                         </div>
                                         <div class="form-group me-2">
                                             <input type="date" class="form-control" id="filterTanggalAwal"
-                                                name="filterTanggalAwal" value="">
+                                                name="filterTanggalAwal" value="{{ $tanggalAwal }}">
                                         </div>
                                         <div class="form-group me-2">
                                             <input type="date" class="form-control" id="filterTanggalAkhir"
-                                                name="filterTanggalAkhir" value="">
+                                                name="filterTanggalAkhir" value="{{ $tanggalAkhir }}">
                                         </div>
                                         <button type="submit" class="btn btn-primary">Filter</button>
                                         <a href="{{ route('taskKaryawan') }}" class="btn btn-danger ms-2">Reset</a>
@@ -65,8 +65,8 @@
                         </div>
 
                         <div class="card-body px-0 pt-0 pb-2">
-                            <div class="table-responsive p-0">
-                                <table id="pegawai-table" class="table align-items-center mb-0">
+                            <div class="table-responsive p-0" >
+                                <table id="task" class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
                                             <th
@@ -146,22 +146,22 @@
                                                 @elseif ($p->status == 'Delayed')
                                                 <span
                                                     class="text-white text-xs font-weight-bold bg-dark badge rounded-pill">
-                                                    Sakit
+                                                    Delayed
                                                 </span>
                                                 @elseif ($p->status == 'Pending')
                                                 <span
                                                     class="text-white text-xs font-weight-bold bg-warning badge rounded-pill">
-                                                    Alpa
+                                                    Pending
                                                 </span>
                                                 @elseif ($p->status == 'Done')
                                                 <span
                                                     class="text-white text-xs font-weight-bold bg-success badge rounded-pill">
-                                                    Alpa
+                                                    Done
                                                 </span>
                                                 @elseif ($p->status == 'Cancelled')
                                                 <span
                                                     class="text-white text-xs font-weight-bold bg-warning badge rounded-pill">
-                                                    Alpa
+                                                    Cancelled
                                                 </span>
                                                 @else
                                                 <span
@@ -170,12 +170,20 @@
                                                 </span>
                                                 @endif
                                             </td>
+                                            @if($p->status == 'Done')
                                             <td class="align-middle text-center">
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                     data-bs-target="#staticBackdrop-{{$p->id}}">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </td>
+                                            @else
+                                            <td class="align-middle text-center text-sm">
+                                                <span class="text-xs font-weight-bold mb-0">
+                                                    Not Done
+                                                </span>
+                                            </td>
+                                            @endif 
                                         </tr>
                                         @endforeach
                                         @endif
@@ -239,7 +247,7 @@
                                 </div>
                                 <div class='mb-3'>
                                     <label for="status" class="form-label">Foto Task</label>
-                                    <img src="{{ asset('FotoProfile/' . optional($p)->foto) }}" alt="Foto Task"
+                                    <img src="{{ asset('FotoProfile/' . $p->foto) }}" alt="Foto Task"
                                         class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
 
                                 </div>
@@ -304,8 +312,8 @@
         $('#filterNama').on('input', function () {
             var inputNama = $(this).val().toLowerCase();
 
-            $('#dataabsensi tbody tr').each(function () {
-                var nama = $(this).find('td:eq(2)').text().toLowerCase();
+            $('#task tbody tr').each(function () {
+                var nama = $(this).find('td:eq(1)').text().toLowerCase();
 
                 if (nama.includes(inputNama)) {
                     $(this).show();

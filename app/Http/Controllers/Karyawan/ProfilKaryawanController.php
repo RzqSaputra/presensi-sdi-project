@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\PM;
+namespace App\Http\Controllers\Karyawan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 use App\Models\Karyawan;
-use App\Models\Presensi;
 use App\Models\Jabatan;
 use App\Models\User;
 
-class ProfilPMController extends Controller
+class ProfilKaryawanController extends Controller
 {
-    public function __construct(){
-        $this->middleware('pm');
+    public function __construct()
+    {
+        $this->middleware('karyawan');
     }
 
-    public function index(Request $request){
+    public function index()
+    {
         $presensi = Auth::user()->load('karyawan');
-        $jabatan = Jabatan::where('id', '>', 1)->get();
-        return view('PM.Profil.index')->with([
-            'title' => 'Profile Project Manager',
-            'presensi' => $presensi,
-            'jabatan' => $jabatan,
+        return view('Karyawan.Profil.index')->with([
+            'title' => 'Profil Karyawan',
+            'presensi' =>$presensi,
+            'presensi' =>$presensi,
         ]);
     }
 
@@ -33,7 +34,6 @@ class ProfilPMController extends Controller
         User::where('id', $userId)
             ->update([
                 'email' => $request->email,
-                'jabatan_id' => $request->jabatan_id,
             ]);
 
         Karyawan::where('user_id', $userId)
@@ -42,13 +42,12 @@ class ProfilPMController extends Controller
                 'nip' => $request->nip,
                 'jenkel' => $request->jenkel,
                 'tgl_lahir' => $request->tgl_lahir,
-                'jabatan_id' => $request->jabatan_id,
                 'no_tlp' => $request->no_tlp,
                 'alamat' => $request->alamat,
             ]);
 
         session()->flash('pesan', "Perubahan Data {$request->nama} berhasil");
-        return redirect()->route('profilPM');
+        return redirect()->route('profilKaryawan');
     }
 
     public function password(Request $request)
@@ -61,12 +60,11 @@ class ProfilPMController extends Controller
         ]);
 
         session()->flash('pesan', "Perubahan Password berhasil");
-        return redirect()->route('profilPM');
+        return redirect()->route('profilKaryawan');
     }
 
     public function image(Request $request)
     {
-        dd($request->all());
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -89,5 +87,4 @@ class ProfilPMController extends Controller
         }
         return redirect()->back()->with('pesan', 'Gambar berhasil diunggah.');
     }
-
 }

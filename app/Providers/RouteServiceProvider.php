@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     protected $namespace = 'App\\Http\\Controllers\\PM';
+    // protected $namespace = [
+    //     'default' => 'App\\Http\\Controllers',
+    //     'PM' => 'App\\Http\\Controllers\\PM',
+    //     'Karyawan' => 'App\\Http\\Controllers\\Karyawan',
+    // ];
     /**
      * The path to the "home" route for your application.
      *

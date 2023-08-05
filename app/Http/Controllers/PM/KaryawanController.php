@@ -119,7 +119,7 @@ class KaryawanController extends Controller
             
             $image = $request->file('image'); // Mengambil file gambar dari form upload
             $imageName = time() . '.' . $image->getClientOriginalExtension(); // Generate nama unik untuk gambar berdasarkan timestamp
-            $image->move(public_path('FotoProfile'), $imageName); // Memindahkan file gambar ke folder yang diinginkan
+            $image->move(public_path('storage/profile'), $imageName); // Memindahkan file gambar ke folder yang diinginkan
 
             // Jika data Karyawan ditemukan, perbarui field foto
             $karyawan->foto = $imageName;

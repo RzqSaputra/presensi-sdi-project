@@ -12,11 +12,19 @@ class TaskKaryawanController extends Controller
         $this->middleware('pm');
     }
 
-    public function index(){
-        $task = Task::with('user.karyawan')->get();
+    public function index(REquest $request){
+        $tanggalAwal    = $request->input('filterTanggalAwal');
+        $tanggalAkhir   = $request->input('filterTanggalAkhir');
+        $task           = Task::with('user.karyawan')->when($tanggalAwal && $tanggalAkhir, 
+        function ($query) use ($tanggalAwal, $tanggalAkhir) {
+        return $query->whereBetween('tgl_task', 
+        [$tanggalAwal, $tanggalAkhir]);})->get();
+        
         return view('PM.Task.index')->with([
             'title' => 'Task Karyawan',
             'task' => $task,
+            'tanggalAwal'   => $tanggalAwal,
+            'tanggalAkhir'  => $tanggalAkhir,
         ]);
     }
 

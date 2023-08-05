@@ -77,10 +77,13 @@
                                                 Tanggal</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                NIP</th>
+                                                Nama</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Nama</th>
+                                                Masuk</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                Selesai</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Status</th>
@@ -115,12 +118,17 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">
-                                                    {{$p->user->karyawan->nip??'N/A'}}
+                                                    {{$p->user->karyawan->nama??'N/A'}}
                                                 </span>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">
-                                                    {{$p->user->karyawan->nama??'N/A'}}
+                                                    {{$p->jam_masuk??'N/A'}}
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold">
+                                                    {{$p->jam_pulang??'N/A'}}
                                                 </span>
                                             </td>
 

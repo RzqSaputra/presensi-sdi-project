@@ -1,15 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PM\JabatanController;
-use App\Http\Controllers\PM\KaryawanController;
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\PM\DataPresensiController;
 use App\Http\Controllers\PM\TaskKaryawanController;
+use App\Http\Controllers\PM\KaryawanController;
 use App\Http\Controllers\PM\ProfilPMController;
+use App\Http\Controllers\PM\JabatanController;
 
-use App\Http\Controllers\ProjectManagerController;
+use App\Http\Controllers\Karyawan\RiwayatPresensiController;
+use App\Http\Controllers\Karyawan\ProfilKaryawanController;
+use App\Http\Controllers\Karyawan\PresensiController;
+use App\Http\Controllers\Karyawan\TaskController;
 
+use App\Location;
 use App\Models\Presensi;
 use Carbon\Carbon;
 
@@ -38,53 +43,37 @@ use Carbon\Carbon;
     Route::post('logout',   [AuthController::class, 'logout'])->name('auth.logout');
 
 
-    Route::group(['middleware' => ['pm']], function(){
-        Route::post('/upload/photo',            [ProjectManagerController::class, 'uploadPhoto'])->name('upload.photo');
-        
-        //Route Project Manager
-        Route::get ('pm',                       [ProjectManagerController::class, 'pm'])->name('pm');
-        Route::post('pm',                       [ProjectManagerController::class, 'createPm'])->name('pm.createPm');
-        Route::post('pm/update/{id}',           [ProjectManagerController::class, 'updatePm'])->name('pm.updatePm');
-        Route::get ('pm/delete/{id}',           [ProjectManagerController::class, 'deletePm'])->name('pm.deletePm');
-        Route::post ('pm/passwordupdate/{id}',  [ProjectManagerController::class, 'updatePmPassword'])->name('pegawai.updatePmPassword');
 
-       
-    });
-
-    //Route Profil
-    Route::group(['middleware' => ['karyawan']], function () {
-        Route::get('/profil',                   [MenuPegawaiController::class, 'index'])->name('profil.index');
-        Route::post('/profil/PUpdate/{id}',     [MenuPegawaiController::class, 'PUpdate'])->name('PUpdate');
-        Route::post('crop',                     [MenuPegawaiController::class, 'crop'])->name('crop');
-        Route::post('/profil/update-pass',      [MenuPegawaiController::class, 'updatePassword'])->name('profil.updatePassword');
+    // Route::group(['middleware' => ['karyawan']], function () {
+    //     Route::get('/profil',                   [MenuPegawaiController::class, 'index'])->name('profil.index');
+    //     Route::post('/profil/PUpdate/{id}',     [MenuPegawaiController::class, 'PUpdate'])->name('PUpdate');
+    //     
+    //     Route::post('/profil/update-pass',      [MenuPegawaiController::class, 'updatePassword'])->name('profil.updatePassword');
 
         
-        //Route MenuPegawai
-        //Task Harian
-        Route::get('task',                  [MenuPegawaiController::class, 'task'])->name('pegawai.task');
-        Route::post('task',                 [MenuPegawaiController::class, 'tambahTaskHarian'])->name('pegawai.tambahTaskHarian');
-        Route::post('/task/update/{id}',    [MenuPegawaiController::class, 'updateTask'])->name('task.updateTask');
-        Route::get('/task/delete/{id}',     [MenuPegawaiController::class, 'deleteTask'])->name('pegawai.deleteTask');
+    //     //Route MenuPegawai
+    //     //Task Harian
+    //     Route::get('task',                  [MenuPegawaiController::class, 'task'])->name('pegawai.task');
+    //     Route::post('task',                 [MenuPegawaiController::class, 'tambahTaskHarian'])->name('pegawai.tambahTaskHarian');
+    //     Route::post('/task/update/{id}',    [MenuPegawaiController::class, 'updateTask'])->name('task.updateTask');
+    //     Route::get('/task/delete/{id}',     [MenuPegawaiController::class, 'deleteTask'])->name('pegawai.deleteTask');
         
         
-        //Task Mingguan
-        Route::get('taskMingguan',              [MenuPegawaiController::class, 'task_mingguan'])->name('pegawai.task_mingguan');
-        Route::post('taskMingguan',             [MenuPegawaiController::class, 'tambahTaskMingguan'])->name('pegawai.tambahTaskMingguan');
-        Route::post('/taskM/update/{id}',       [MenuPegawaiController::class, 'updateTaskM'])->name('task.updateTaskM');
-        Route::get('/taskM/delete/{id}',        [MenuPegawaiController::class, 'deleteTaskM'])->name('pegawai.deleteTaskM');
+    //     //Task Mingguan
+    //     Route::get('taskMingguan',              [MenuPegawaiController::class, 'task_mingguan'])->name('pegawai.task_mingguan');
+    //     Route::post('taskMingguan',             [MenuPegawaiController::class, 'tambahTaskMingguan'])->name('pegawai.tambahTaskMingguan');
+    //     Route::post('/taskM/update/{id}',       [MenuPegawaiController::class, 'updateTaskM'])->name('task.updateTaskM');
+    //     Route::get('/taskM/delete/{id}',        [MenuPegawaiController::class, 'deleteTaskM'])->name('pegawai.deleteTaskM');
         
         
-        //Presensi
-        Route::get('presensi',              [MenuPegawaiController::class, 'presensi'])->name('pegawai.presensi');
-        Route::post('masuk',                [PresensiController::class, 'masuk'])->name('presensi.masuk');
-        Route::put('pulang/{presensi}',     [PresensiController::class, 'pulang'])->name('presensi.pulang');
-    });
+        
+    // });
 
 
-    Route::get('/ip', function(){
-        $location = Location::get();
-        dd($location);
-    });
+Route::get('/ip', function(){
+    $locations = Location::get();
+    dd($locations);
+});
 
 
 Route::group(['middleware' => ['pm']], function(){
@@ -123,7 +112,7 @@ Route::group(['middleware' => ['pm']], function(){
         Route::get ('edit/{id}',     'TaskKaryawanController@update')->name('taskKaryawan.update');
     });
 
-     /* ---------------------------------------- R O U T E - P R O F I L  ---------------------------------------- */
+    /* ---------------------------------------- R O U T E - P R O F I L  ---------------------------------------- */
     Route::prefix('profilPM')->group(function() {
         Route::get ('profil',        'ProfilPMController@index')->name('profilPM');
         Route::post('update',        'ProfilPMController@update')->name('profilPM.update');
@@ -131,4 +120,32 @@ Route::group(['middleware' => ['pm']], function(){
         Route::post('image/upload',  'ProfilPMController@image')->name('profilPM.image');
     });
     
+});
+
+
+Route::group(['middleware' => ['karyawan']], function () {
+
+    /* ---------------------------------------- R O U T E - P R E S E N S I ---------------------------------------- */
+    Route::prefix('presensi')->group(function() {
+        Route::get('presensi',           [PresensiController::class, 'index'])->name('presensi.karyawan');
+        Route::post('masuk',             [PresensiController::class, 'masuk'])->name('presensi.masuk');
+        Route::put('pulang/{presensi}',  [PresensiController::class, 'pulang'])->name('presensi.pulang');
+    });
+
+    Route::prefix('riwayatPresensi')->group(function() {
+        Route::get('riwayatPresensi',       [RiwayatPresensiController::class, 'index'])->name('riwayatPresensi');
+        Route::get('riwayatPresensi/{id}',  [RiwayatPresensiController::class, 'detail'])->name('riwayatPresensi.detail');
+    });
+
+    Route::prefix('profilKaryawan')->group(function() {
+        Route::get('profil',            [ProfilKaryawanController::class, 'index'])->name('profilKaryawan');
+        Route::post('profil/update',    [ProfilKaryawanController::class, 'update'])->name('profilKaryawan.update');
+        Route::post('profil/password',  [ProfilKaryawanController::class, 'password'])->name('profilKaryawan.password');
+        Route::post('image/upload',     [ProfilKaryawanController::class, 'image'])->name('profilKaryawan.image');
+    });
+
+    Route::prefix('task')->group(function() {
+        Route::get('task',  [TaskController::class, 'index'])->name('task');
+    });
+
 });

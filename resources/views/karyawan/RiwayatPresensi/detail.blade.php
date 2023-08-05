@@ -32,11 +32,8 @@
                         <div class="card">
                             <div class="card-header pb-0">
                                 <div class="row">
-                                    <form action="{{ route('dataPresensi.update', ['id' => $detail->id]) }}"
-                                        method="POST">
-                                        @csrf
                                         <div class="col">
-                                            <button class="btn btn-success btn-sm" id="editButton">Save</button>
+                                             <h5 class="font-weight-bolder">Detail Presensi</h5>
                                         </div>
                                 </div>
                             </div>
@@ -55,7 +52,7 @@
                                         <div class="form-group">
                                             <label for="example-text-input" class="form-control-label">NIP</label>
                                             <input class="form-control" type="email" disabled
-                                                value="{{$detail->user->karyawan->nip}}">
+                                                value="{{$detail->user->karyawan->nip}}"> 
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -70,7 +67,7 @@
                                             <label for="example-text-input" class="form-control-label">Tanggal
                                                 Presensi</label>
                                             <input name="tgl_presensi" id="tgl_presensi" class="form-control"
-                                                type="date" required value="{{$detail->tgl_presensi}}">
+                                                type="date" required value="{{$detail->tgl_presensi}}" disabled> 
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -97,54 +94,47 @@
                                             @endif
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="example-text-input"
                                                 class="form-control-label">Keterangan</label>
                                             <input name="ket" id="keterangan" class="form-control" type="text" required
-                                                value="{{$detail->ket}}">
+                                                value="{{$detail->ket}}" disabled>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="example-text-input" class="form-control-label">Jam Masuk</label>
                                             <input name="jam_masuk" id="jam_masuk" class="form-control" type="time"
-                                                required value="{{$detail->jam_masuk}}">
+                                                required value="{{$detail->jam_masuk}}" disabled>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
-                                        <div class="text-start">
-                                            <label class="form-control-label">
-                                                Lokasi Presensi Masuk
-                                            </label>
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Lokasi Presensi
+                                                Masuk</label>
+                                            <input class="form-control" type="text" value="{{$detail->lokasi_masuk}}"
+                                                disabled>
                                         </div>
-                                        <a href="https://www.google.com/maps/place?q={{ urlencode($detail->lokasi_masuk) }}"
-                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Lihat
-                                                <i class="fa fa-map-marker"></i>
-                                            </button>
-                                        </a>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="example-text-input" class="form-control-label">Jam
                                                 Pulang</label>
                                             <input name="jam_pulang" id="jam_pulang" class="form-control" type="time"
-                                                required value="{{$detail->jam_pulang}}">
+                                                required value="{{$detail->jam_pulang}}" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="text-start">
-                                            <label class="form-control-label">
-                                                Lokasi Presensi Pulang
-                                            </label>
+                                        <div class="form-group">
+                                            <label for="example-text-input" class="form-control-label">Lokasi Presensi
+                                                Keluar</label>
+                                            <input class="form-control" type="text" value="{{$detail->lokasi_pulang}}"
+                                                disabled>
                                         </div>
-                                        <a href="https://www.google.com/maps/place?q={{ urlencode($detail->lokasi_pulang) }}"
-                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Lihat
-                                                <i class="fa fa-map-marker"></i>
-                                            </button>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -156,19 +146,17 @@
                             <a href="{{ asset('storage/presensi/masuk-' . $detail->foto_masuk) }}">
                                 <div class="bg-secondary text-center card-img-top"
                                     style="height: 400px; display: flex; align-items: center; justify-content: center;">
-                                    <img id="profileImage"
-                                        src="{{ asset('storage/presensi/masuk-' . $detail->foto_masuk) }}"
+                                    <img id="profileImage" src="{{ asset('storage/presensi/masuk-' . $detail->foto_masuk) }}"
                                         alt="Foto Profil" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </a>
                             <h5 class="font-weight-bolder text-center my-3">Check-in</h5>
                         </div>
-                        <div class="card card-profile">
+                       <div class="card card-profile">
                             <a href="{{ asset('storage/presensi/pulang-' . $detail->foto_pulang) }}">
                                 <div class="bg-secondary text-center card-img-top"
                                     style="height: 400px; display: flex; align-items: center; justify-content: center;">
-                                    <img id="profileImage"
-                                        src="{{ asset('storage/presensi/pulang-' . $detail->foto_pulang) }}"
+                                    <img id="profileImage" src="{{ asset('storage/presensi/pulang-' . $detail->foto_pulang) }}"
                                         alt="Foto Profil" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </a>

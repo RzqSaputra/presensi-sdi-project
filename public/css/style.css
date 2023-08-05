@@ -1,0 +1,30 @@
+input.form-control-sm[type="search"] {
+    font-size: 16px;
+    height: 38px;
+    margin-right: 20px;
+}
+
+label {
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+.dataTables_info {
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+ul.pagination {
+    padding-right: 25px;
+}
+
+.page-item .page-link,
+.page-item spa {
+    border-radius: 10% !important;
+    margin: 0px;
+    color: #cacaca;
+    width: auto;
+    padding: 12px;
+}

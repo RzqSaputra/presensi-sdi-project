@@ -64,28 +64,7 @@ class MenuPegawaiController extends Controller
 
     }
 
-    function crop(Request $request)
-    {
-        $path = 'users/images/';
-        if (!File::exists(public_path($path))) {
-            File::makeDirectory(public_path($path), 0777, true);
-        }
-        $file = $request->file('file');
-        $new_image_name = 'UIMG' . date('Ymd') . uniqid() . '.jpg';
-        $upload = $file->move(public_path($path), $new_image_name);
-        if ($upload) {
-
-            $PegawaiInfo = Pegawai::where('user_id', '=', Auth::user()->id)->first();
-            $pegawaiphoto = $PegawaiInfo->foto;
-            if ($pegawaiphoto != '') {
-                unlink($path . $pegawaiphoto);
-            }
-            Pegawai::where('user_id', '=', Auth::user()->id)->update(['foto' => $new_image_name]);
-            return response()->json(['status' => 1, 'msg' => 'Image has been cropped successfully.', 'name' => $new_image_name]);
-        } else {
-            return response()->json(['status' => 0, 'msg' => 'Something went wrong, try again later']);
-        }
-    }
+    
 
 
     //PRESENSI
