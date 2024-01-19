@@ -14,66 +14,78 @@
         <!-- Navbar -->
         @include('template.navbar')
         <!-- End Navbar -->
-
-            <div class="container-fluid px-auto">
-                <form method="POST" action="
-                @if(!isset($presensi))
-                {{ route('presensi.masuk')}}
-                @else
-                {{ route('presensi.pulang',$presensi->id)}}
-                @endif
-                ">
-                    @csrf
-                    <div class="p-5 bg-white rounded-3">
-                        <div class="d-flex justify-content-center">
-                            <h5 class="font-weight-bolder me-3 bag">
-                                @if(!isset($presensi))
-                                Presensi Masuk
-                                @else
-                                @if(!isset($presensi->jam_pulang ) && $status!="Izin")
-                                Presensi Keluar
-                                @else
-                                Terima Kasih Sudah Melakukan Presensi Hari Ini :)
-                                @endif
-                                @endif
-                            </h5>
-                            <br>
-                        </div>
-                        <small class="d-flex justify-content-center pb-2 text-danger" id="presensi-info"></small>
-
-                        @if(!isset($presensi->jam_pulang) && $status!="Izin")
-                        @if(isset($presensi)){{ method_field('PUT') }}@endif
-                        <input type="hidden" name="image" class="image-tag">
-                        <input type="hidden" name="lokasi" value="" id="lokasi">
-                        <div class="text-center">
-                            <div id="my_camera" class="bg-secondary mb-3 d-inline-block" style="height:300px; width: 400px">
-                            </div>
-                            <br />
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="">
-                                    <button class="btn btn-primary" type=button onClick="startCamera(this)">Start
-                                        Camera</button>
-                                    <button id="btn-presensi" class="btn btn-success">Presensi</button>
+        <div class="container-fluid px-auto">
+                <div class="p-5 bg-white rounded-3">
+                    <div class="d-flex justify-content-center">
+                        <h5 class="font-weight-bolder me-3 bag">
+                            @if (!$presensi)
+                            <p class="text-center font-weight-bolder h4 mb-3">Presensi Masuk</p>
+                            <form method="POST" action="{{ route('presensi.masuk')}}" enctype="multipart/form-data">
+                                @csrf
+                                <small class="d-flex justify-content-center pb-2 text-danger" id="presensi-info"></small>
+                                <input type="hidden" name="lokasi" value="" id="lokasi">
+                                <input type="hidden" name="my_camera" class="image-tag">
+                                <div class="text-center">
+                                    <div id="my_camera" class="bg-secondary mb-3 d-inline-block" style="height:300px; width: 400px">
+                                    </div>
+                                    <br />
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="">
+                                            <button class="btn btn-primary" type="button" onClick="startCamera(this)">Start Camera</button>
+                                            <button id="btn-presensi" class="btn btn-success">Presensi</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            @if (!isset($presensi->jam_masuk))
-                            <div class="form-check d-inline-flex">
-                                <input class="form-check-input" onchange="showKet()" type="checkbox" value="izin"
-                                    name="izin" id="izin">
-                                <label class="form-check-label" for="izin">
-                                    Izin
-                                </label>
-                            </div>
-                            @endif
-                            <div class="col-md-6 offset-3">
-                                <textarea class="form-control" id="ket" name="ket" rows="2"
-                                    placeholder="Keterangan"></textarea>
-                            </div>
-                        </div>
+                            </form>
+
+                            @elseif (strtotime($presensi->mulai) == strtotime($presensi->selesai) && ($presensi->status == 1 || $presensi->status == 4))
+                            Presensi Pulang
+                            <form method="POST" action="{{ route('presensi.pulang', $presensi->id)}}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="lokasi" value="" id="lokasi">
+                                <input type="hidden" name="my_camera" class="image-tag">
+                                <div class="text-center">
+                                    <div id="my_camera" class="bg-secondary mb-3 d-inline-block" style="height:300px; width: 400px">
+                                    </div>
+                                    <br />
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="">
+                                            <button class="btn btn-primary" type="button" onClick="startCamera(this)">Start Camera</button>
+                                            <button id="btn-presensi" class="btn btn-success">Presensi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            @elseif (strtotime($presensi->selesai) < strtotime('16:00:00') && $presensi->status == 2)
+                            Presensi Masuk
+                            <form method="POST" action="{{ route('presensi.masuk')}}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="lokasi" value="" id="lokasi">
+                                <div class="text-center">
+                                    <div id="my_camera" class="bg-secondary mb-3 d-inline-block" style="height:300px; width: 400px">
+                                    </div>
+                                    <br />
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="">
+                                            <button class="btn btn-primary" type="button" onClick="startCamera(this)">Start Camera</button>
+                                            <button id="btn-presensi" class="btn btn-success">Presensi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            @elseif ($presensi->status == 3)
+                            Kami menantikan hari di mana Anda akan kembali berada di tengah-tengah kami dengan
+                            semangat yang segar.
+                            @else
+                            "Terima kasih atas presensi Anda hari ini. Semoga Anda tetap sehat dan produktif."
                         @endif
-                    </div>
-                </form>
+                    </h5>
+                    <br>
+                </div>
             </div>
+        </div>
         <!--end container-->
 
         <!--  Footer -->
@@ -83,28 +95,27 @@
 
     <!--   Core JS Files   -->
     @include('template.script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
-    <script language="JavaScript">
+    <script>
         $('#btn-presensi').hide();
         $('#ket').hide();
 
-        @if(!isset($presensi->jam_masuk))
-        let izin;
-            
         function currentTime() {
             let date = new Date();
             let hh = date.getHours();
             let hh2 = date.getHours();
             let mm = date.getMinutes();
-    
+
             hh = (hh < 10) ? "0" + hh : hh;
             mm = (mm < 10) ? "0" + mm : mm;
 
-            const masuk = new Date('2020-01-01 08:00');
-            let sekarang = new Date('2020-01-01 '+ hh + ":" + mm);
+            const masuk = new Date('2020-01-01 07:30');
+            let sekarang = new Date('2020-01-01 ' + hh + ":" + mm);
 
             if (masuk.getTime() < sekarang.getTime()) {
-                let late = ((hh2-8 > 0) ? (hh2-=8)  + "Jam " : null) + mm +"Menit"
+                let late = ((hh2 - 8 > 0) ? (hh2 -= 8) + "Jam " : null) + mm + "Menit"
                 document.getElementById("presensi-info").innerHTML = "Telat " + late;
             }
 
@@ -112,50 +123,51 @@
                 currentTime()
             }, 6000);
         }
-        
+
         currentTime();
-        function showKet() {
-            izin = !izin;
-            if(izin){
-                $("#ket").show();
-                $("#ket").attr("required","true");
-            }else{
-                $("#ket").hide();
-                $("#ket").removeAttr("required");
-            }
-        }
-        @endif
-       
+
         function startCamera(btn) {
             Webcam.set({
-            width: 400,
-            height: 300,
-            image_format: 'jpeg',
-            jpeg_quality: 50
+                width: 400,
+                height: 300,
+                image_format: 'jpeg',
+                jpeg_quality: 50
             });
-    
-            Webcam.attach( '#my_camera' );
-            btn.setAttribute('onclick','take_snapshot(this)');
+
+            Webcam.attach('#my_camera');
+            btn.setAttribute('onclick', 'take_snapshot(this)');
             btn.innerHTML = 'Take Picture';
             $('#btn-presensi').hide();
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position)=>{
-                    $('#lokasi').val(position.coords.latitude+","+position.coords.longitude)
+                navigator.geolocation.getCurrentPosition((position) => {
+                    $('#lokasi').val(position.coords.latitude + "," + position.coords.longitude)
                 });
-            } else { 
+            } else {
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
         }
-        
+
         function take_snapshot(btn) {
-            Webcam.snap( function(data_uri) {
+            Webcam.snap(function (data_uri) {
                 $(".image-tag").val(data_uri);
-                document.getElementById('my_camera').innerHTML = '<img src="'+data_uri+'" />';
-            } );
-            btn.setAttribute('onclick','startCamera(this)');
+                document.getElementById('my_camera').innerHTML = '<img src="' + data_uri + '" />';
+            });
+            btn.setAttribute('onclick', 'startCamera(this)');
             btn.innerHTML = 'Retake'
             $('#btn-presensi').show();
         }
+
+        var url = window.location.pathname;
+        var filename = url.substring(url.lastIndexOf('/') + 1);
+        if (filename === 'presensi' || filename === 'sakit' || filename === 'izin') {
+            $('#collapseThree').addClass('show');
+            $('#collapseThree').addClass('in');
+        } else {
+            $('#collapseThree').removeClass('show');
+            $('#collapseThree').removeClass('in');
+        }
+
     </script>
+</body>
 
 </html>

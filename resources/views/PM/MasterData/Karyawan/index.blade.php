@@ -177,7 +177,7 @@
                                 <select name="jabatan_id" id="jabatan_id" class="form-select" required>
                                     <option value=""></option>
                                     @foreach($jabatan->where('id', '>', 1) as $j)
-                                        <option value="{{ $j->id }}">{{ $j->jabatan }}</option>
+                                    <option value="{{ $j->id }}">{{ $j->jabatan }}</option>
                                     @endforeach
                                 </select>
                                 <div id="jabatan_id-feedback" class="invalid-feedback"></div>
@@ -408,9 +408,6 @@
             });
         });
 
-    </script>
-
-    <script>
         var url = window.location.pathname;
         var filename = url.substring(url.lastIndexOf('/') + 1);
         if (filename === 'karyawan' || filename === 'jabatan') {

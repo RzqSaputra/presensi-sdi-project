@@ -66,7 +66,6 @@ class ProfilPMController extends Controller
 
     public function image(Request $request)
     {
-        dd($request->all());
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

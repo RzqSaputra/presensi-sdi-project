@@ -1,5 +1,3 @@
-{{-- @dd(Auth::user()); --}}
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,8 +25,8 @@
                 @endif
             </div>
             <div class="row">
-                @if (Auth::user()->jabatan_id == 3)
 
+                @if (Auth::user()->jabatan_id == 3)
                 <div class="col-xl-3 col-sm-6 mb-xl-4 mb-4">
                     <div class="card">
                         <div class="card-body p-5">
@@ -72,7 +70,7 @@
                     </div>
                 </div>
 
-                @else
+                @elseif(Auth::user()->jabatan_id == 2)
 
                 <div class="col-xl-3 col-sm-6 mb-xl-4 mb-4">
                     <div class="card ">
@@ -162,6 +160,21 @@
                         </div>
                     </div>
                 </div>
+
+                @elseif(Auth::user()->jabatan_id == 1)
+
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="numbers">
+                                        <p class="text-lg mb-0 font-weight-bold text-center">Hallo Wellcome CEO !</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
                 @endif
 
             </div>

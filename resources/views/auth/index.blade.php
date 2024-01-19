@@ -50,12 +50,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                                    <p class="mb-4 text-sm mx-auto">
-                                        Belum memiliki akun?
-                                        <a href="/daftar" class="text-primary text-gradient font-weight-bold">Daftar</a>
-                                    </p>
-                                </div>
                             </div>
                         </div>
                         <div

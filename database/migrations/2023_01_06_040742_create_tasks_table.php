@@ -20,12 +20,9 @@ class CreateTasksTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('judul');
-            $table->text('deskripsi')->nullable();
-            $table->string('foto')->nullable();
-            $table->date('tgl_task')->nullable();
-            $table->time('waktu_mulai')->nullable();
-            $table->time('waktu_selesai')->nullable();
-            $table->enum('status', ['Not Started','In Progress','Delayed','Pending','Done','Cancelled'])->default('Not Started');
+            $table->date('mulai')->nullable();
+            $table->date('selesai')->nullable();
+            $table->tinyInteger('status')->nullable();
             $table->timestamps();
         });
     }

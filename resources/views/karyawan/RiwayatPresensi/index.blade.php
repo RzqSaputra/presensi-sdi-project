@@ -51,29 +51,19 @@
                                         <tr>
                                             <th class="text-center text-xs font-weight-bolder">No</th>
                                             <th class="text-center text-xs font-weight-bolder">Tanggal</th>
-                                            <th class="text-center text-xs font-weight-bolder">Jam Masuk</th>
-                                            <th class="text-center text-xs font-weight-bolder">Jam Pulang</th>
+                                            <th class="text-center text-xs font-weight-bolder">Mulai</th>
+                                            <th class="text-center text-xs font-weight-bolder">Selesai</th>
                                             <th class="text-center text-xs font-weight-bolder">Status</th>
                                             <th class="text-center text-xs font-weight-bolder">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($presensi->isEmpty())
-                                        <tr>
-                                            <td colspan="6" rowspan="4"
-                                                class="text-center text-uppercase text-secondary text-sm py-4 text-sm py-5 font-weight-bold">
-                                                Tidak Ada Riwayat Presensi !
-                                            </td>
-                                        </tr>
-
-                                        @else
-
                                         @foreach($presensi as $key => $p)
                                         <tr>
                                             <td class="col-md-1 text-sm text-center">{{$loop->iteration}}</td>
                                             <td class="col-md-3 text-sm text-center">{{$p->tgl_presensi}}</td>
-                                            <td class="col-md-2 text-sm text-center">{{$p->jam_masuk}}</td>
-                                            <td class="col-md-2 text-sm text-center">{{$p->jam_pulang ?? 'Belum Presensi Pulang'}}</td>
+                                            <td class="col-md-2 text-sm text-center">{{$p->mulai}}</td>
+                                            <td class="col-md-2 text-sm text-center">{{$p->selesai}}</td>
                                             <td class="col-md-2 text-sm text-center">
                                                 @if ($p->status == 1)
                                                 <span
@@ -92,8 +82,8 @@
                                                 </span>
                                                 @elseif ($p->status == 4)
                                                 <span
-                                                    class="text-white text-xs font-weight-bold bg-danger badge rounded-pill">
-                                                    Alpa
+                                                    class="text-white text-xs font-weight-bold bg-warning badge rounded-pill">
+                                                    Telat
                                                 </span>
                                                 @else
                                                 <span
@@ -111,7 +101,6 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                        @endif
                                     </tbody>
                                 </table>
                             </div>

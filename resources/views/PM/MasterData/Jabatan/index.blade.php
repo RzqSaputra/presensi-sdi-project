@@ -248,7 +248,7 @@
 
         var url = window.location.pathname;
         var filename = url.substring(url.lastIndexOf('/') + 1);
-        if (filename === 'karyawan' || filename === 'jabatan') {
+        if (filename === 'jabatan' || filename === 'karyawan') {
             $('#collapseTwo').addClass('show');
             $('#collapseTwo').addClass('in');
         } else {

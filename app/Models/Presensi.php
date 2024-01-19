@@ -8,20 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Presensi extends Model
 {
     use HasFactory;
-    
     protected $guarded = ['id'];
-    
     protected $fillable =[
         'user_id',
         'tgl_presensi',
-        'jam_masuk',
+        'mulai',
         'foto_masuk',
         'lokasi_masuk',
-        'jam_pulang',
+        'selesai',
         'foto_pulang',
         'lokasi_pulang',
         'status',
         'ket',
+        'file',
+        'total_telat',
     ];
 
     public function user()

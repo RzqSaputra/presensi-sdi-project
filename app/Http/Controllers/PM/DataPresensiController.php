@@ -5,7 +5,7 @@ namespace App\Http\Controllers\PM;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 use App\Models\Presensi;
 use App\Models\User;
 
@@ -15,23 +15,34 @@ class DataPresensiController extends Controller
         $this->middleware('pm');
     }
 
-    public function index(Request $request){
-        $tanggalAwal    = $request->input('filterTanggalAwal');
-        $tanggalAkhir   = $request->input('filterTanggalAkhir');
-        $user           = User::all();
-        $presensi       = Presensi::with('user.karyawan')->when($tanggalAwal && $tanggalAkhir, 
-        function ($query) use ($tanggalAwal, $tanggalAkhir) {
-        return $query->whereBetween('tgl_presensi', 
-        [$tanggalAwal, $tanggalAkhir]);})->paginate(5);
+    public function index(Request $request)
+    {
+        $tanggalAwal = $request->input('filterTanggalAwal');
+        $tanggalAkhir = $request->input('filterTanggalAkhir');
+        $user = User::all();
 
-        return view('PM.Presensi.index')->with([
-            'title'         => 'Data Presensi',
-            'presensi'      => $presensi,
-            'tanggalAwal'   => $tanggalAwal,
-            'tanggalAkhir'  => $tanggalAkhir,
-            'user'          => $user,
+        // Ambil tanggal hari ini dengan timezone default (asumsikan database menggunakan timezone yang sama)
+        $tanggalHariIni = \Carbon\Carbon::now()->format('Y-m-d');
+
+        $presensi = Presensi::with('user.karyawan')
+            ->when($tanggalAwal && $tanggalAkhir, function ($query) use ($tanggalAwal, $tanggalAkhir) {
+                return $query->whereBetween('tgl_presensi', [$tanggalAwal, $tanggalAkhir]);
+            })
+            ->when(!$tanggalAwal && !$tanggalAkhir, function ($query) use ($tanggalHariIni) {
+                // Filter berdasarkan tanggal hari ini jika tidak ada rentang tanggal yang ditentukan
+                return $query->whereDate('tgl_presensi', $tanggalHariIni);
+            })
+            ->get();
+
+        return view('PM.PresensiKaryawan.index')->with([
+            'title' => 'Data Presensi',
+            'presensi' => $presensi,
+            'tanggalAwal' => $tanggalAwal,
+            'tanggalAkhir' => $tanggalAkhir,
+            'user' => $user,
         ]);
     }
+
 
     public function create(Request $request){
         $validator = Validator::Make($request->all(), [
@@ -46,8 +57,8 @@ class DataPresensiController extends Controller
             'user_id'           => $request->user_id,
             'status'            => $request->status,
             'tgl_presensi'      => $request->tgl_presensi,
-            'jam_masuk'         => $request->jam_masuk,
-            'jam_pulang'        => $request->jam_pulang,
+            'mulai'             => $request->mulai,
+            'selesai'           => $request->selesai,
             'ket'               => $request->ket,
             'lokasi_masuk'      => 'Sabang Digital Indonesia',
             'lokasi_pulang'     => 'Sabang Digital Indonesia',
@@ -81,7 +92,7 @@ class DataPresensiController extends Controller
     public function detail($id)
     {
         $detail = Presensi::with('user.karyawan')->findOrFail($id);
-        return view('PM.Presensi.detail')->with([
+        return view('PM.PresensiKaryawan.detail')->with([
             'detail' => $detail,
             'title'  => 'Detail Presensi'
         ]);

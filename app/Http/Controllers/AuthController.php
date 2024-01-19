@@ -18,36 +18,6 @@ class AuthController extends Controller
             'title' => 'Login'
         ]);
     }
-    public function create()
-    {
-        return view('auth.daftar')->with([
-            'title' => 'Daftar'
-        ]);
-    }
-    public function store(Request $request)
-    {
-        $validateData = $request->validate([
-            'nama'      => 'required|min:3|max:50',
-            'email'     => 'required|email|unique:users',
-            'password'  => 'required|min:6|confirmed',
-            'password_confirmation' => 'required|min:6',
-            'nip' => 'required|numeric|unique:App\Models\Pegawai,nip'
-        ]);
-        User::create([
-            'nama' => $validateData['nama'],
-            'role' => 'Pegawai',
-            'email' => $validateData['email'],
-            'password' => Hash::make($validateData['password'])
-        ]);
-        Pegawai::create([
-            'user_id' => User::latest()->first()->id,
-            'nip' => trim($request->nip),
-        ]);
-
-        $request->session()->flash('success', "Sign Up Success! Please Login");
-        return redirect()->route('auth.login');
-    }
-
     
     public function login(Request $request)
     {

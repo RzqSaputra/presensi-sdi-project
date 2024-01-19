@@ -20,14 +20,18 @@ class CreatePresensisTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->date('tgl_presensi');
-            $table->time('jam_masuk')->nullable();
+            $table->time('mulai')->nullable();
             $table->string('foto_masuk')->nullable();
             $table->string('lokasi_masuk')->nullable();
-            $table->time('jam_pulang')->nullable(); 
+            $table->time('selesai')->nullable(); 
             $table->string('foto_pulang')->nullable();
             $table->string('lokasi_pulang')->nullable();
             $table->tinyInteger('status')->nullable();
+            $table->string('file')->nullable();
             $table->string('ket')->nullable();
+            $table->time('total_masuk')->nullable(); 
+            $table->time('total_izin')->nullable();
+            $table->time('total_telat')->nullable(); 
             $table->timestamps();
         });
     }

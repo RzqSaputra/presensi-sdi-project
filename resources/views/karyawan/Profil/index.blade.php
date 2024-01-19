@@ -30,7 +30,6 @@
                             </div>
                         </a>
 
-                        <!-- Tombol "Change Profile" untuk membuka modal -->
                         <div class="card-body text-center">
                             <h4>{{ $presensi->karyawan->nama }}</h4>
                             <p>{{ $presensi->karyawan->jabatan->jabatan }}</p>
@@ -50,7 +49,6 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <!-- Form untuk mengunggah gambar -->
                                 <form action="{{ route('profilKaryawan.image') }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
