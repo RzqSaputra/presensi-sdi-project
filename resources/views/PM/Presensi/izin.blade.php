@@ -26,12 +26,12 @@
                                 <input type="hidden" name="lokasi" value="" id="lokasi">
                                 <div class="form-group">
                                     <label for="file">Pilih File:</label>
-                                    <input type="file" class="form-control" name="file[]" id="file" multiple required>
+                                    <input type="file" class="form-control" name="file[]" id="file" multiple>
                                 </div>
                                 <div class="form-group">
                                     <label for="keterangan">Keterangan:</label>
                                     <textarea class="form-control" name="keterangan" id="keterangan"
-                                        required></textarea>
+                                        ></textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">

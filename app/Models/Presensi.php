@@ -21,6 +21,8 @@ class Presensi extends Model
         'status',
         'ket',
         'file',
+        'total_masuk',
+        'total_izin',
         'total_telat',
     ];
 

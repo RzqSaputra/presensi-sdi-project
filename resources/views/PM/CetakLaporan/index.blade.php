@@ -24,20 +24,43 @@
             </tr>
         </thead>
         <tbody>
+            @php
+            $totalMasuk = Carbon\Carbon::createFromTime(0, 0, 0);
+            $totalIzin = Carbon\Carbon::createFromTime(0, 0, 0);
+            $totalTelat = Carbon\Carbon::createFromTime(0, 0, 0);
+            @endphp
+
             @foreach($presensi as $key => $p)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $p->tgl_presensi }}</td>
                 <td>{{ $p->user->karyawan->nama }}</td>
-                <td>Null</td>
-                <td>Null</td>
                 <td>
                     @php
-                    $waktu = Carbon\Carbon::parse($p->total_telat);
-                    $jam = $waktu->hour;
-                    $menit = $waktu->minute;
+                    $waktuKerja = $p->total_masuk ? Carbon\Carbon::parse($p->total_masuk) :
+                    Carbon\Carbon::createFromTime(0, 0, 0);
+                    $totalMasuk =
+                    $totalMasuk->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
-                    {{ $jam }} Jam {{ $menit }} Menit
+                    {{ $waktuKerja->format('H:i:s') }}
+                </td>
+                <td>
+                    @php
+                    $waktuKerja = $p->total_izin ? Carbon\Carbon::parse($p->total_izin) :
+                    Carbon\Carbon::createFromTime(0, 0, 0);
+                    $totalIzin =
+                    $totalIzin->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
+                    @endphp
+                    {{ $waktuKerja->format('H:i:s') }}
+                </td>
+                <td>
+                    @php
+                    $waktuKerja = $p->total_telat ? Carbon\Carbon::parse($p->total_telat) :
+                    Carbon\Carbon::createFromTime(0, 0, 0);
+                    $totalTelat =
+                    $totalTelat->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
+                    @endphp
+                    {{ $waktuKerja->format('H:i:s') }}
                 </td>
                 <td>
                     @if ($p->status == 1)
@@ -56,6 +79,9 @@
             @endforeach
         </tbody>
     </table>
+    <p>Total Masuk: {{ $totalMasuk->hour }} Jam {{ $totalMasuk->minute }} Menit</p>
+    <p>Total Izin: {{ $totalIzin->hour }} Jam {{ $totalIzin->minute }} Menit</p>
+    <p>Total Telat: {{ $totalTelat->hour }} Jam {{ $totalTelat->minute }} Menit</p>
 </body>
 
 </html>
