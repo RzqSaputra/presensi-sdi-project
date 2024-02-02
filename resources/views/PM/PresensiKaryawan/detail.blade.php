@@ -88,7 +88,7 @@
                                                 value="Sakit" disabled>
                                             @elseif ($detail->status == 4)
                                             <input name="ket" id="keterangan" class="form-control" type="text" required
-                                                value="Alpa" disabled>
+                                                value="Telat" disabled>
                                             @else
                                             <span
                                                 class="text-white text-xs font-weight-bold bg-secondary badge rounded-pill">
@@ -108,8 +108,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="example-text-input" class="form-control-label">Jam Masuk</label>
-                                            <input name="jam_masuk" id="jam_masuk" class="form-control" type="time"
-                                                required value="{{$detail->jam_masuk}}">
+                                            <input name="mulai" id="mulai" class="form-control" type="time"
+                                                required value="{{$detail->mulai}}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -129,8 +129,8 @@
                                         <div class="form-group">
                                             <label for="example-text-input" class="form-control-label">Jam
                                                 Pulang</label>
-                                            <input name="jam_pulang" id="jam_pulang" class="form-control" type="time"
-                                                required value="{{$detail->jam_pulang}}">
+                                            <input name="selesai" id="selesai" class="form-control" type="time"
+                                                required value="{{$detail->selesai}}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">

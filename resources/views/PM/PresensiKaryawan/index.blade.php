@@ -59,20 +59,34 @@
                                                     name="filterTanggalAkhir" value="{{ $tanggalAkhir }}">
                                             </div>
                                             <button type="submit" class="btn btn-primary d-done">Filter</button>
+
+
+                                            @php
+                                            $tanggalAwal = request('filterTanggalAwal', now()->toDateString());
+                                            $tanggalAkhir = request('filterTanggalAkhir', now()->toDateString());
+                                            @endphp
+
+                                            <div class="form-group me-2" style="margin-left: 15px">
+                                                <input type="text" class="form-control" id="searchInput" name="search"
+                                                    placeholder="Search By Name" value="{{ $search }}">
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary d-done">Cari</button>
                                             <a href="{{ route('dataPresensi') }}"
                                                 class="btn btn-danger ms-2 d-done">Reset</a>
-                                            <button id="exportExcel" class="btn btn-success" style="margin-left: 6px">
-                                                <i class="far fa-file-excel"></i> Excel
-                                            </button>
-                                            @php
-                                            $tanggalAwal = now()->toDateString();
-                                            $tanggalAkhir = now()->toDateString();
-                                            @endphp
-                                            <a target="_blank" type="submit" class="btn btn-primary d-don" style="margin-left: 8px " href="{{ route('cetakLaporan', 
-                                            [
+
+                                            <p style="margin-left: 10px; font-size: 30px; color: gray">|</p>
+                                            <a target="_blank" type="submit" class="btn btn-danger d-don"
+                                                id="rekapButton" style="margin-left: 8px " href="{{ route('cetakLaporan', [
                                                 'tanggalAwal' => $tanggalAwal,
                                                 'tanggalAkhir' => $tanggalAkhir,
-                                            ]) }}">Rekap</a>
+                                                'search' => request('search'),
+                                            ]) }}"><i class="far fa-file-pdf"></i> PDF</a>
+
+                                            <button id="exportExcel" class="btn btn-success" style="margin-left: 6px">
+                                                <i class="far fa-file-excel"></i> EXCEL
+                                            </button>
+
                                         </div>
                                     </form>
                                 </div>
@@ -265,6 +279,7 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 <script>
+    
     $(document).ready(function () {
         var table = $('#example').DataTable({
             dom: 'lBfrtip',
@@ -288,22 +303,6 @@
             $('option[value=""]').remove();
         });
     });
-
-    // $(document).ready(function () {
-    //     // Memeriksa apakah DataTable sudah diinisialisasi sebelumnya pada elemen dengan ID "example"
-    //     if ($.fn.DataTable.isDataTable('#example')) {
-    //         // Jika sudah diinisialisasi, hancurkan inisialisasinya sebelum membuat inisialisasi baru
-    //         $('#example').DataTable().destroy();
-    //     }
-
-    //     // Membuat inisialisasi DataTable baru pada elemen dengan ID "example"
-    //     $('#example').DataTable({
-    //         language: {
-    //             emptyTable: "Tidak ada data presensi hari ini"
-    //         }
-    //         // Pengaturan lain yang mungkin Anda miliki
-    //     });
-    // });
 
 </script>
 

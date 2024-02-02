@@ -13,18 +13,22 @@ class CetakLaporanController extends Controller
     }
 
     public function index(Request $request, $tanggalAwal, $tanggalAkhir)
-    {
-        $search = request()->query('search');
-        $presensi = Presensi::whereBetween('tgl_presensi', [$tanggalAwal, $tanggalAkhir])
-                            ->when($search, function ($query, $search) {
-                                return $query->where('user_id', 'like', '%'.$search.'%');
-                            })
-                            ->get();
-        
-        return view('PM.CetakLaporan.index')->with([
-            'presensi' => $presensi,
-            'tanggalAwal' => $tanggalAwal,
-            'tanggalAkhir' => $tanggalAkhir,
-        ]);
-    }
+{
+    $search = $request->input('search');
+    $presensi = Presensi::whereBetween('tgl_presensi', [$tanggalAwal, $tanggalAkhir])
+    ->when($search, function ($query) use ($search) {
+        return $query->whereHas('user.karyawan', function ($query) use ($search) {
+            $query->where('nama', 'like', '%' . $search . '%');
+        });
+    })->get();
+
+    return view('PM.CetakLaporan.index')->with([
+        'presensi' => $presensi,
+        'tanggalAwal' => $tanggalAwal,
+        'tanggalAkhir' => $tanggalAkhir,
+        'search' => $search,
+    ]);
+}
+
+
 }

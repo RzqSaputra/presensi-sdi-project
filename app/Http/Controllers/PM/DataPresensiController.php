@@ -19,26 +19,34 @@ class DataPresensiController extends Controller
     {
         $tanggalAwal = $request->input('filterTanggalAwal');
         $tanggalAkhir = $request->input('filterTanggalAkhir');
+        $search = $request->input('search');
         $user = User::all();
 
         // Ambil tanggal hari ini dengan timezone default (asumsikan database menggunakan timezone yang sama)
         $tanggalHariIni = \Carbon\Carbon::now()->format('Y-m-d');
 
         $presensi = Presensi::with('user.karyawan')
-            ->when($tanggalAwal && $tanggalAkhir, function ($query) use ($tanggalAwal, $tanggalAkhir) {
-                return $query->whereBetween('tgl_presensi', [$tanggalAwal, $tanggalAkhir]);
-            })
-            ->when(!$tanggalAwal && !$tanggalAkhir, function ($query) use ($tanggalHariIni) {
-                // Filter berdasarkan tanggal hari ini jika tidak ada rentang tanggal yang ditentukan
-                return $query->whereDate('tgl_presensi', $tanggalHariIni);
-            })
-            ->get();
+        ->when($tanggalAwal && $tanggalAkhir, function ($query) use ($tanggalAwal, $tanggalAkhir) {
+            return $query->whereBetween('tgl_presensi', [$tanggalAwal, $tanggalAkhir]);
+        })
+        ->when(!$tanggalAwal && !$tanggalAkhir, function ($query) use ($tanggalHariIni) {
+            // Filter berdasarkan tanggal hari ini jika tidak ada rentang tanggal yang ditentukan
+            return $query->whereDate('tgl_presensi', $tanggalHariIni);
+        })
+        ->when($search, function ($query) use ($search) {
+            // Filter berdasarkan pencarian nama karyawan
+            return $query->whereHas('user.karyawan', function ($query) use ($search) {
+                $query->where('nama', 'like', '%' . $search . '%');
+            });
+        })->get();
+
 
         return view('PM.PresensiKaryawan.index')->with([
             'title' => 'Data Presensi',
             'presensi' => $presensi,
             'tanggalAwal' => $tanggalAwal,
             'tanggalAkhir' => $tanggalAkhir,
+            'search' => $search,
             'user' => $user,
         ]);
     }
@@ -74,8 +82,8 @@ class DataPresensiController extends Controller
         if ($detail) {
             $detail->tgl_presensi = $request->tgl_presensi;
             $detail->ket = $request->ket;
-            $detail->jam_masuk = $request->jam_masuk;
-            $detail->jam_pulang = $request->jam_pulang;
+            $detail->mulai = $request->mulai;
+            $detail->selesai = $request->selesai;
             $detail->save();
 
             session()->flash('pesan', "Perubahan Data {$detail->user->karyawan->nama} berhasil");
