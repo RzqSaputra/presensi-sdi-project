@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cetak Laporan</title>
 </head>
-
 <body>
     <h1>Laporan Presensi</h1>
     <p>Tanggal Awal: {{ $tanggalAwal }}</p>
     <p>Tanggal Akhir: {{ $tanggalAkhir }}</p>
-    <table border="2px solid black">
+    <table border="2px solid black" id="example" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>No</th>
@@ -82,6 +81,10 @@
     <p>Total Masuk: {{ $totalMasuk->hour }} Jam {{ $totalMasuk->minute }} Menit</p>
     <p>Total Izin: {{ $totalIzin->hour }} Jam {{ $totalIzin->minute }} Menit</p>
     <p>Total Telat: {{ $totalTelat->hour }} Jam {{ $totalTelat->minute }} Menit</p>
-</body>
 
+    {{-- <a href="{{ route('exportView', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir]) }}">
+        <button>Export to Excel</button>
+    </a> --}}
+
+</body>
 </html>

@@ -16,8 +16,11 @@ use App\Http\Controllers\Karyawan\ProfilKaryawanController;
 use App\Http\Controllers\Karyawan\PresensiController;
 use App\Http\Controllers\Karyawan\TaskController;
 use App\Http\Controllers\Karyawan\DetailTaskController;
+use App\Http\Controllers\ExportController;
 use App\Models\Presensi;
 use Carbon\Carbon;
+
+// Route::get('/export-view/{tanggalAwal}/{tanggalAkhir}', [ExportController::class, 'exportView'])->name('exportView');
 
     Route::get('/', function () {
         $today  = Carbon::today();
@@ -173,8 +176,6 @@ Route::group(['middleware' => ['karyawan']], function () {
         Route::post('detailtask/create/{task_id}',  [DetailTaskController::class, 'create'])->name('detailtask.create');
         Route::post('detailtask/done/{id}',         [DetailTaskController::class, 'done'])->name('detailtask.done');
         Route::post('detailtask/cancle/{id}',       [DetailTaskController::class, 'cancel'])->name('detailtask.cancel');
-
-
     });
-
+    
 });
