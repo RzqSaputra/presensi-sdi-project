@@ -8,11 +8,8 @@
 </head>
 <body>
     <h1>Laporan Presensi</h1>
-   <a target="_blank" href="{{ route('export.excell', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Excel</button></a>
-   <a target="_blank" href="{{ route('export.excell', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Pdf</button></a>
-
-    <p>Tanggal Awal: {{ $tanggalAwal }}</p>
-    <p>Tanggal Akhir: {{ $tanggalAkhir }}</p>
+   {{-- <a target="_blank" href="{{ route('export.excell', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir]) }}">klass</a> --}}
+    <p>Rekap Data Presensi dari tanggal {{$tanggalAwal}} - {{$tanggalAkhir}}</p>
     <table border="2px solid black" id="example" class="table table-striped table-bordered">
         <thead>
             <tr>

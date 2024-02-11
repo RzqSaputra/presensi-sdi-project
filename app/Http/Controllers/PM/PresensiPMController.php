@@ -31,156 +31,85 @@ class PresensiPMController extends Controller
         ]);
     }
 
-    // public function masuk(Request $request)
-    // {
-    //     $isLate = false;
-    //     $img = $request->my_camera;
-    //     $folderPath = "storage/presensi/masuk-";
-    //     $fileName = uniqid() . '.png';
+    public function masuk(Request $request)
+    {
+        $isLate = false;
+        $img = $request->my_camera;
+        $folderPath = "storage/presensi/masuk-";
+        $fileName = uniqid() . '.png';
         
-    //     $explodedData = explode(",", $img);
-    //     $imageData = isset($explodedData[1]) ? base64_decode($explodedData[1]) : null;
-    //     $filePath = $folderPath . $fileName;
+        $explodedData = explode(",", $img);
+        $imageData = isset($explodedData[1]) ? base64_decode($explodedData[1]) : null;
+        $filePath = $folderPath . $fileName;
 
-    //     file_put_contents($filePath, $imageData);
+        file_put_contents($filePath, $imageData);
 
-    //     $tglPresensi = now()->format('Y-m-d');
+        $tglPresensi = now()->format('Y-m-d');
 
-    //     // Cek apakah sudah pernah absen sebelumnya pada tanggal yang sama
-    //     $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
-    //         ->where('tgl_presensi', $tglPresensi)
-    //         ->orderBy('id', 'asc') // Urutkan berdasarkan ID (status pertama kali)
-    //         ->first();
+        // Cek apakah sudah pernah absen sebelumnya pada tanggal yang sama
+        $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
+            ->where('tgl_presensi', $tglPresensi)
+            ->orderBy('id', 'asc') // Urutkan berdasarkan ID (status pertama kali)
+            ->first();
 
-    //     if ($presensiSebelumnya) {
-    //         // Jika ada data absen pertama, gunakan status dari data tersebut
-    //         $status = $presensiSebelumnya->status;
-    //         $status = $isLate ? 4 : 1;
-    //     } else {
-    //         // Jika tidak ada, hitung total telat berdasarkan waktu masuk yang diinginkan
-    //         $desiredStartTime = now()->setTime(7, 30);
-    //         $actualStartTime = now();
-    //         $timeDifference = $actualStartTime->diffInMinutes($desiredStartTime);
-    //         $isLate = $timeDifference > 0;
-    //         $status = $isLate ? 4 : 1;
-    //     }
+        if ($presensiSebelumnya) {
+            // Jika ada data absen pertama, gunakan status dari data tersebut
+            $status = $presensiSebelumnya->status;
+            $status = $isLate ? 4 : 1;
+        } else {
+            // Jika tidak ada, hitung total telat berdasarkan waktu masuk yang diinginkan
+            $desiredStartTime = now()->setTime(7, 30);
+            $actualStartTime = now();
+            $timeDifference = $actualStartTime->diffInMinutes($desiredStartTime);
+            $isLate = $timeDifference > 0;
+            $status = $isLate ? 4 : 1;
+        }
 
-    //     $data = [
-    //         'user_id' => Auth::user()->id,
-    //         'status' => $status,
-    //         'tgl_presensi' => $tglPresensi,
-    //         'mulai' => now()->format('H:i:s'),
-    //         'selesai' => now()->format('H:i:s'),
-    //         'foto_masuk' => $fileName,
-    //         'foto_pulang' => $fileName,
-    //         'lokasi_masuk' => $request->lokasi,
-    //         'lokasi_pulang' => $request->lokasi,
-    //         'ket' => $request->ket,
-    //     ];
+        $data = [
+            'user_id' => Auth::user()->id,
+            'status' => $status,
+            'tgl_presensi' => $tglPresensi,
+            'mulai' => now()->format('H:i:s'),
+            'selesai' => now()->format('H:i:s'),
+            'foto_masuk' => $fileName,
+            'foto_pulang' => $fileName,
+            'lokasi_masuk' => $request->lokasi,
+            'lokasi_pulang' => $request->lokasi,
+            'ket' => $request->ket,
+        ];
 
-    //     // Mengosongkan total telat jika sudah ada di data sebelumnya
-    //     if ($presensiSebelumnya && $presensiSebelumnya->total_telat) {
-    //         $data['total_telat'] = null;
-    //     } else {
-    //         // Jika tidak ada total telat pada data sebelumnya, hitung dan masukkan ke data baru
-    //         $totalTelat = $isLate ? sprintf('%02d:%02d:00', floor($timeDifference / 60), $timeDifference % 60) : null;
-    //         $data['total_telat'] = $totalTelat;
-    //     }
+        // Mengosongkan total telat jika sudah ada di data sebelumnya
+        if ($presensiSebelumnya && $presensiSebelumnya->total_telat) {
+            $data['total_telat'] = null;
+        } else {
+            // Jika tidak ada total telat pada data sebelumnya, hitung dan masukkan ke data baru
+            $totalTelat = $isLate ? sprintf('%02d:%02d:00', floor($timeDifference / 60), $timeDifference % 60) : null;
+            $data['total_telat'] = $totalTelat;
+        }
 
-    //     $selesai = Presensi::where('user_id', Auth::user()->id)
-    //         ->latest('id')
-    //         ->where('tgl_presensi', now()->format('Y-m-d'))
-    //         ->first();
+        $selesai = Presensi::where('user_id', Auth::user()->id)
+            ->latest('id')
+            ->where('tgl_presensi', now()->format('Y-m-d'))
+            ->first();
 
-    //     // Update waktu selesai pada presensi sebelumnya jika status adalah 2
-    //     if ($selesai && $selesai->status === 2) {
-    //         $selesai->update(['selesai' => now()->format('H:i:s')]);
-    //     }
+        // Update waktu selesai pada presensi sebelumnya jika status adalah 2
+        if ($selesai && $selesai->status === 2) {
+            // Hitung total izin dan update kolom total_izin
+            $waktuMulai = Carbon::parse($selesai->mulai);
+            $waktuSelesai = now();
+            $durasiIzinSeconds = $waktuMulai->diffInSeconds($waktuSelesai);
+            $durasiIzinHours = floor($durasiIzinSeconds / 3600);
+            $durasiIzinMinutes = floor(($durasiIzinSeconds % 3600) / 60);
+            $durasiIzinSeconds = $durasiIzinSeconds % 60;
+            $totalIzin = sprintf('%02d:%02d:%02d', $durasiIzinHours, $durasiIzinMinutes, $durasiIzinSeconds);
+            
+            $selesai->update(['selesai' => now()->format('H:i:s'), 'total_izin' => $totalIzin]);
+        }
 
-    //     Presensi::create($data);
+        Presensi::create($data);
 
-    //     return redirect(route('presensiPM.pm'));
-    // }
-
-public function masuk(Request $request)
-{
-    $isLate = false;
-    $img = $request->my_camera;
-    $folderPath = "storage/presensi/masuk-";
-    $fileName = uniqid() . '.png';
-    
-    $explodedData = explode(",", $img);
-    $imageData = isset($explodedData[1]) ? base64_decode($explodedData[1]) : null;
-    $filePath = $folderPath . $fileName;
-
-    file_put_contents($filePath, $imageData);
-
-    $tglPresensi = now()->format('Y-m-d');
-
-    // Cek apakah sudah pernah absen sebelumnya pada tanggal yang sama
-    $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
-        ->where('tgl_presensi', $tglPresensi)
-        ->orderBy('id', 'asc') // Urutkan berdasarkan ID (status pertama kali)
-        ->first();
-
-    if ($presensiSebelumnya) {
-        // Jika ada data absen pertama, gunakan status dari data tersebut
-        $status = $presensiSebelumnya->status;
-        $status = $isLate ? 4 : 1;
-    } else {
-        // Jika tidak ada, hitung total telat berdasarkan waktu masuk yang diinginkan
-        $desiredStartTime = now()->setTime(7, 30);
-        $actualStartTime = now();
-        $timeDifference = $actualStartTime->diffInMinutes($desiredStartTime);
-        $isLate = $timeDifference > 0;
-        $status = $isLate ? 4 : 1;
+        return redirect(route('presensiPM.pm'));
     }
-
-    $data = [
-        'user_id' => Auth::user()->id,
-        'status' => $status,
-        'tgl_presensi' => $tglPresensi,
-        'mulai' => now()->format('H:i:s'),
-        'selesai' => now()->format('H:i:s'),
-        'foto_masuk' => $fileName,
-        'foto_pulang' => $fileName,
-        'lokasi_masuk' => $request->lokasi,
-        'lokasi_pulang' => $request->lokasi,
-        'ket' => $request->ket,
-    ];
-
-    // Mengosongkan total telat jika sudah ada di data sebelumnya
-    if ($presensiSebelumnya && $presensiSebelumnya->total_telat) {
-        $data['total_telat'] = null;
-    } else {
-        // Jika tidak ada total telat pada data sebelumnya, hitung dan masukkan ke data baru
-        $totalTelat = $isLate ? sprintf('%02d:%02d:00', floor($timeDifference / 60), $timeDifference % 60) : null;
-        $data['total_telat'] = $totalTelat;
-    }
-
-    $selesai = Presensi::where('user_id', Auth::user()->id)
-        ->latest('id')
-        ->where('tgl_presensi', now()->format('Y-m-d'))
-        ->first();
-
-    // Update waktu selesai pada presensi sebelumnya jika status adalah 2
-    if ($selesai && $selesai->status === 2) {
-        // Hitung total izin dan update kolom total_izin
-        $waktuMulai = Carbon::parse($selesai->mulai);
-        $waktuSelesai = now();
-        $durasiIzinSeconds = $waktuMulai->diffInSeconds($waktuSelesai);
-        $durasiIzinHours = floor($durasiIzinSeconds / 3600);
-        $durasiIzinMinutes = floor(($durasiIzinSeconds % 3600) / 60);
-        $durasiIzinSeconds = $durasiIzinSeconds % 60;
-        $totalIzin = sprintf('%02d:%02d:%02d', $durasiIzinHours, $durasiIzinMinutes, $durasiIzinSeconds);
-        
-        $selesai->update(['selesai' => now()->format('H:i:s'), 'total_izin' => $totalIzin]);
-    }
-
-    Presensi::create($data);
-
-    return redirect(route('presensiPM.pm'));
-}
 
 
     public function pulang(Request $request, $presensiId)
@@ -283,198 +212,77 @@ public function masuk(Request $request)
         ]);
     }
 
-    // public function uploadizin(Request $request)
-    // {
-    //     // $files      = $request->file('file');
-    //     $keterangan = $request->keterangan;
-    //     $mulai      = $request->mulai;
-    //     $selesai    = $request->selesai;
-    //     $lokasi     = $request->lokasi;
+    public function uploadizin(Request $request)
+    {
+        $keterangan = $request->keterangan;
+        $mulai      = $request->mulai;
+        $selesai    = $request->selesai;
+        $lokasi     = $request->lokasi;
 
-    //     // foreach ($files as $file) {
-    //         // $namaFile = $file->getClientOriginalName();
-            
-    //         // $file->storeAs('izin', $namaFile);
-            
-    //         // Hitung durasi izin
-    //         $waktuMulai = Carbon::parse($mulai);
-    //         $waktuSelesai = Carbon::parse($selesai);
-    //         $durasiIzin = $waktuMulai->diff($waktuSelesai);
+        $waktuMulai = Carbon::parse($mulai);
+        $waktuSelesai = Carbon::parse($selesai);
+        $durasiIzin = $waktuMulai->diff($waktuSelesai);
 
-    //         $data = [
-    //             'user_id' => Auth::user()->id,
-    //             'status' => 2,
-    //             'tgl_presensi' => now()->format('Y-m-d'),
-    //             'mulai' => now()->format('H:i:s'),
-    //             'selesai' => $selesai,
-    //             // 'foto_masuk' => $namaFile,
-    //             // 'foto_pulang' => $namaFile,
-    //             'lokasi_masuk' => $request->lokasi,
-    //             'lokasi_pulang' => $request->lokasi,
-    //             'ket' => $keterangan,
-    //             'total_izin' => $durasiIzin->format('%H:%I:%S'),
-    //         ];
+        $tglPresensi = now()->format('Y-m-d');
 
-    //         $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
-    //             ->whereIn('status', [1, 4])
-    //             ->latest('id')
-    //             ->where('tgl_presensi', now()->format('Y-m-d'))
-    //             ->first();
+        // Cek apakah sudah pernah absen sebelumnya pada tanggal yang sama
+        $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
+            ->where('tgl_presensi', $tglPresensi)
+            ->orderBy('id', 'desc') // Urutkan berdasarkan ID secara descending
+            ->first();
 
-    //         if ($presensiSebelumnya) {
-    //             $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
-    //             Presensi::create($data);
-    //         } else {
-    //             Presensi::create($data);
-    //         }
-    //     // }
-    //     return redirect()->route('presensiPM.pm');
-    // }
+        if ($presensiSebelumnya) {
+            // Jika ada data presensi sebelumnya
+            if ($presensiSebelumnya->status === 2 && now()->lte(Carbon::parse($tglPresensi . ' 16:00:00'))) {
+                // Update waktu selesai jika izin dan waktu selesai tidak sesuai
+                $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
 
-// public function uploadizin(Request $request)
-// {
-//     $keterangan = $request->keterangan;
-//     $mulai      = $request->mulai;
-//     $selesai    = $request->selesai;
-//     $lokasi     = $request->lokasi;
+                // Perbarui total_masuk jika izin dan waktu selesai tidak sesuai
+                if ($presensiSebelumnya->total_izin && $waktuMulai->diffInMinutes(now()) > $durasiIzin->format('%i')) {
+                    $waktuMasukSebelumnya = Carbon::parse($presensiSebelumnya->mulai);
+                    $durasiTotalMasuk = $waktuMasukSebelumnya->diff(now());
+                    $totalMasuk = $durasiTotalMasuk->format('%H:%I:%S');
+                    $presensiSebelumnya->update(['total_masuk' => $totalMasuk]);
+                }
 
-//     $waktuMulai = Carbon::parse($mulai);
-//     $waktuSelesai = Carbon::parse($selesai);
-//     $durasiIzin = $waktuMulai->diff($waktuSelesai);
+                return redirect()->route('presensiPM.pm');
+            } else {
+                // Jika tidak sesuai atau status bukan izin, lanjutkan dengan membuat presensi izin baru
+                $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
+            }
+        }
 
-//     $tglPresensi = now()->format('Y-m-d');
+        // Tidak ada data presensi sebelumnya atau status bukan izin, buat presensi izin baru
+        $data = [
+            'user_id' => Auth::user()->id,
+            'status' => 2,
+            'tgl_presensi' => $tglPresensi,
+            'mulai' => now()->format('H:i:s'),
+            'selesai' => $selesai,
+            'lokasi_masuk' => $request->lokasi,
+            'lokasi_pulang' => $request->lokasi,
+            'ket' => $keterangan,
+            'total_izin' => $durasiIzin->format('%H:%I:%S'),
+        ];
 
-//     // Cek apakah sudah pernah absen sebelumnya pada tanggal yang sama
-//     $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
-//         ->where('tgl_presensi', $tglPresensi)
-//         ->orderBy('id', 'desc') // Urutkan berdasarkan ID secara descending
-//         ->first();
+        Presensi::create($data);
 
-//     if ($presensiSebelumnya) {
-//         // Jika ada data presensi sebelumnya
-//         if ($presensiSebelumnya->status === 2 && now()->lte(Carbon::parse($tglPresensi . ' 16:00:00'))) {
-//             // Update waktu selesai jika izin dan waktu selesai tidak sesuai
-//             $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
-
-//             // Perbarui total_masuk jika izin dan waktu selesai tidak sesuai
-//             if ($presensiSebelumnya->total_izin && $waktuMulai->diffInMinutes(now()) > $durasiIzin->format('%i')) {
-//                 $waktuMulaiSebelumnya = Carbon::parse($presensiSebelumnya->mulai);
-//                 $durasiTotalMasuk = $waktuMulaiSebelumnya->diff(now());
-//                 $totalMasuk = $durasiTotalMasuk->format('%H:%I:%S');
-//                 $presensiSebelumnya->update(['total_masuk' => $totalMasuk]);
-//             }
-
-//             return redirect()->route('presensiPM.pm');
-//         } else {
-//             // Jika tidak sesuai atau status bukan izin, lanjutkan dengan membuat presensi izin baru
-//             $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
-
-//             $data = [
-//                 'user_id' => Auth::user()->id,
-//                 'status' => 2,
-//                 'tgl_presensi' => $tglPresensi,
-//                 'mulai' => now()->format('H:i:s'),
-//                 'selesai' => $selesai,
-//                 'lokasi_masuk' => $request->lokasi,
-//                 'lokasi_pulang' => $request->lokasi,
-//                 'ket' => $keterangan,
-//                 'total_izin' => $durasiIzin->format('%H:%I:%S'),
-//             ];
-
-//             Presensi::create($data);
-//             return redirect()->route('presensiPM.pm');
-//         }
-//     } else {
-//         // Jika belum pernah presensi pada tanggal yang sama, lanjutkan dengan membuat presensi izin baru
-//         $data = [
-//             'user_id' => Auth::user()->id,
-//             'status' => 2,
-//             'tgl_presensi' => $tglPresensi,
-//             'mulai' => now()->format('H:i:s'),
-//             'selesai' => $selesai,
-//             'lokasi_masuk' => $request->lokasi,
-//             'lokasi_pulang' => $request->lokasi,
-//             'ket' => $keterangan,
-//             'total_izin' => $durasiIzin->format('%H:%I:%S'),
-//         ];
-
-//         Presensi::create($data);
-//         return redirect()->route('presensiPM.pm');
-//     }
-// }
-
-public function uploadizin(Request $request)
-{
-    $keterangan = $request->keterangan;
-    $mulai      = $request->mulai;
-    $selesai    = $request->selesai;
-    $lokasi     = $request->lokasi;
-
-    $waktuMulai = Carbon::parse($mulai);
-    $waktuSelesai = Carbon::parse($selesai);
-    $durasiIzin = $waktuMulai->diff($waktuSelesai);
-
-    $tglPresensi = now()->format('Y-m-d');
-
-    // Cek apakah sudah pernah absen sebelumnya pada tanggal yang sama
-    $presensiSebelumnya = Presensi::where('user_id', Auth::user()->id)
+    // Cek status di data sebelumnya dengan status 1 atau 4
+    $presensiSebelumnyaMasuk = Presensi::where('user_id', Auth::user()->id)
+        ->whereIn('status', [1, 4]) // Hanya mencakup status 1 dan 4
+        ->latest('id')
         ->where('tgl_presensi', $tglPresensi)
-        ->orderBy('id', 'desc') // Urutkan berdasarkan ID secara descending
         ->first();
 
-    if ($presensiSebelumnya) {
-        // Jika ada data presensi sebelumnya
-        if ($presensiSebelumnya->status === 2 && now()->lte(Carbon::parse($tglPresensi . ' 16:00:00'))) {
-            // Update waktu selesai jika izin dan waktu selesai tidak sesuai
-            $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
+    if ($presensiSebelumnyaMasuk) {
+        // Hitung total_masuk
+        $waktuMulaiSebelumnya = Carbon::parse($presensiSebelumnyaMasuk->mulai);
+        $durasiTotalMasuk = $waktuMulaiSebelumnya->diff(now());
+        $totalMasuk = $durasiTotalMasuk->format('%H:%I:%S');
 
-            // Perbarui total_masuk jika izin dan waktu selesai tidak sesuai
-            if ($presensiSebelumnya->total_izin && $waktuMulai->diffInMinutes(now()) > $durasiIzin->format('%i')) {
-                $waktuMasukSebelumnya = Carbon::parse($presensiSebelumnya->mulai);
-                $durasiTotalMasuk = $waktuMasukSebelumnya->diff(now());
-                $totalMasuk = $durasiTotalMasuk->format('%H:%I:%S');
-                $presensiSebelumnya->update(['total_masuk' => $totalMasuk]);
-            }
-
-            return redirect()->route('presensiPM.pm');
-        } else {
-            // Jika tidak sesuai atau status bukan izin, lanjutkan dengan membuat presensi izin baru
-            $presensiSebelumnya->update(['selesai' => now()->format('H:i:s')]);
-        }
+        // Update total_masuk di data sebelumnya
+        $presensiSebelumnyaMasuk->update(['total_masuk' => $totalMasuk]);
     }
-
-    // Tidak ada data presensi sebelumnya atau status bukan izin, buat presensi izin baru
-    $data = [
-        'user_id' => Auth::user()->id,
-        'status' => 2,
-        'tgl_presensi' => $tglPresensi,
-        'mulai' => now()->format('H:i:s'),
-        'selesai' => $selesai,
-        'lokasi_masuk' => $request->lokasi,
-        'lokasi_pulang' => $request->lokasi,
-        'ket' => $keterangan,
-        'total_izin' => $durasiIzin->format('%H:%I:%S'),
-    ];
-
-    Presensi::create($data);
-
-// Cek status di data sebelumnya dengan status 1 atau 4
-$presensiSebelumnyaMasuk = Presensi::where('user_id', Auth::user()->id)
-    ->whereIn('status', [1, 4]) // Hanya mencakup status 1 dan 4
-    ->latest('id')
-    ->where('tgl_presensi', $tglPresensi)
-    ->first();
-
-if ($presensiSebelumnyaMasuk) {
-    // Hitung total_masuk
-    $waktuMulaiSebelumnya = Carbon::parse($presensiSebelumnyaMasuk->mulai);
-    $durasiTotalMasuk = $waktuMulaiSebelumnya->diff(now());
-    $totalMasuk = $durasiTotalMasuk->format('%H:%I:%S');
-
-    // Update total_masuk di data sebelumnya
-    $presensiSebelumnyaMasuk->update(['total_masuk' => $totalMasuk]);
-}
-    return redirect()->route('presensiPM.pm');
-}
-
+        return redirect()->route('presensiPM.pm');
+    }
 }

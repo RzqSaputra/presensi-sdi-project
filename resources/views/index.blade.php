@@ -109,7 +109,7 @@
                                 <div class="col-4 text-end">
                                     <div
                                         class="icon icon-shape bg-gradient-warning shadow-success text-center rounded-circle">
-                                        <i class="ni ni-active-40 text-lg opacity-10" aria-hidden="true"></i>
+                                        <i class="ni ni-user-run text-lg opacity-10" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>
@@ -117,28 +117,6 @@
                     </div>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-xl-4 mb-4">
-                    <div class="card">
-                        <div class="card-body p-5">
-                            <div class="row">
-                                <div class="col-8">
-                                    <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Karyawan Alpa</p>
-                                        <h5 class="font-weight-bolder">
-                                            {{$alpa}}
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="col-4 text-end">
-                                    <div
-                                        class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                        <i class="ni ni-fat-remove text-lg opacity-10" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6">
                     <div class="card">
                         <div class="card-body p-5">
                             <div class="row">
@@ -152,8 +130,30 @@
                                 </div>
                                 <div class="col-4 text-end">
                                     <div
-                                        class="icon icon-shape bg-gradient-dark shadow-warning text-center rounded-circle">
+                                        class="icon icon-shape bg-gradient-dark shadow-danger text-center rounded-circle">
                                         <i class="ni ni-badge text-lg opacity-10" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Karyawan Sakit</p>
+                                        <h5 class="font-weight-bolder">
+                                            {{$izin}}
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div
+                                        class="icon icon-shape bg-gradient-danger shadow-warning text-center rounded-circle">
+                                        <i class="ni ni-ambulance text-lg opacity-10" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>

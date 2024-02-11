@@ -76,16 +76,16 @@
                                                 class="btn btn-danger ms-2 d-done">Reset</a>
 
                                             <p style="margin-left: 10px; font-size: 30px; color: gray">|</p>
-                                            <a target="_blank" type="submit" class="btn btn-danger d-don"
+                                            <a target="_blank" type="submit" class="btn btn-dark d-don"
                                                 id="rekapButton" style="margin-left: 8px " href="{{ route('cetakLaporan', [
                                                 'tanggalAwal' => $tanggalAwal,
                                                 'tanggalAkhir' => $tanggalAkhir,
                                                 'search' => request('search'),
-                                            ]) }}"><i class="far fa-file-pdf"></i> PDF</a>
+                                            ]) }}"><i class="fa fa-print"></i>   PDF</a>
 
-                                            <button id="exportExcel" class="btn btn-success" style="margin-left: 6px">
+                                            {{-- <button id="exportExcel" class="btn btn-success" style="margin-left: 6px">
                                                 <i class="far fa-file-excel"></i> EXCEL
-                                            </button>
+                                            </button> --}}
 
                                         </div>
                                     </form>

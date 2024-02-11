@@ -21,20 +21,21 @@ use App\Models\Presensi;
 use Carbon\Carbon;
 
 // Route::get('/export-view/{tanggalAwal}/{tanggalAkhir}', [ExportController::class, 'exportView'])->name('exportView');
+Route::get('/export-test/{tanggalAwal}/{tanggalAkhir}/{id}', [ExportController::class, 'export'])->name('export.excell');
 
     Route::get('/', function () {
         $today  = Carbon::today();
         $count  = DB::table('karyawans')->count();
         $izin   = Presensi::where('status', 2)->whereDate('tgl_presensi', $today)->count();
-        $telat  = Presensi::where('status', 3)->whereDate('tgl_presensi', $today)->count();
-        $alpa   = Presensi::where('status', 4)->whereDate('tgl_presensi', $today)->count();
+        $sakit  = Presensi::where('status', 3)->whereDate('tgl_presensi', $today)->count();
+        $telat  = Presensi::where('status', 4)->whereDate('tgl_presensi', $today)->count();
 
         return view('index')->with([
             'title' => 'Sabang Digital Indonesia',
             'count' => $count,
             'izin' => $izin,
             'telat' => $telat,
-            'alpa' => $alpa,
+            'telat' => $telat,
         ]);
     })->name('Dashboard')->middleware('auth');
 
