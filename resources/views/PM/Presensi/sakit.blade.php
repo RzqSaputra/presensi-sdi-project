@@ -22,7 +22,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">Input File Sakit</h5>
-                            <form method="POST" enctype="multipart/form-data" action="{{route('presensiPM.uploadsakit')}}">
+                            {{-- <form method="POST" enctype="multipart/form-data" action="{{route('presensiPM.uploadsakit')}}">
                                 @csrf
                                 <input type="hidden" name="lokasi" value="" id="lokasi">
                                 <div class="form-group">
@@ -37,7 +37,28 @@
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Unggah</button>
                                 </div>
-                            </form>
+                            </form> --}}
+
+                            <form method="POST" enctype="multipart/form-data" action="{{ route('presensiPM.uploadsakit') }}">
+    @csrf
+    <input type="hidden" name="lokasi" value="" id="lokasi">
+
+    <div class="form-group">
+        <label for="file">Pilih File (Maksimal 2MB):</label>
+        <input type="file" class="form-control" name="file[]" id="file" multiple accept=".pdf, .doc, .docx" required>
+        <!-- Note: accept attribute restricts the file types that can be selected -->
+    </div>
+
+    <div class="form-group">
+        <label for="ket">Keterangan:</label>
+        <textarea class="form-control" name="ket" id="ket" required></textarea>
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Unggah</button>
+    </div>
+</form>
+
                         </div>
                     </div>
                 </div>

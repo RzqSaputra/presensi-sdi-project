@@ -202,6 +202,7 @@ class PresensiPMController extends Controller
         ];
         Presensi::create($data);
     }
+
     return redirect()->route('presensiPM.pm');
     }
 

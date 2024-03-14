@@ -9,7 +9,8 @@
 <body>
     <h1>Laporan Presensi</h1>
    <a target="_blank" href="{{ route('export.excell', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Excel</button></a>
-   <a target="_blank" href="{{ route('export.excell', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Pdf</button></a>
+   <a target="_blank" href="{{ route('exportPdf', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Pdf</button></a>
+
 
     <p>Tanggal Awal: {{ $tanggalAwal }}</p>
     <p>Tanggal Akhir: {{ $tanggalAkhir }}</p>
@@ -26,12 +27,6 @@
             </tr>
         </thead>
         <tbody>
-            @php
-            $totalMasuk = Carbon\Carbon::createFromTime(0, 0, 0);
-            $totalIzin = Carbon\Carbon::createFromTime(0, 0, 0);
-            $totalTelat = Carbon\Carbon::createFromTime(0, 0, 0);
-            @endphp
-
             @foreach($presensi as $key => $p)
             <tr>
                 <td>{{ $loop->iteration }}</td>
@@ -41,8 +36,6 @@
                     @php
                     $waktuKerja = $p->total_masuk ? Carbon\Carbon::parse($p->total_masuk) :
                     Carbon\Carbon::createFromTime(0, 0, 0);
-                    $totalMasuk =
-                    $totalMasuk->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
                     {{ $waktuKerja->format('H:i:s') }}
                 </td>
@@ -50,8 +43,6 @@
                     @php
                     $waktuKerja = $p->total_izin ? Carbon\Carbon::parse($p->total_izin) :
                     Carbon\Carbon::createFromTime(0, 0, 0);
-                    $totalIzin =
-                    $totalIzin->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
                     {{ $waktuKerja->format('H:i:s') }}
                 </td>
@@ -59,8 +50,6 @@
                     @php
                     $waktuKerja = $p->total_telat ? Carbon\Carbon::parse($p->total_telat) :
                     Carbon\Carbon::createFromTime(0, 0, 0);
-                    $totalTelat =
-                    $totalTelat->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
                     {{ $waktuKerja->format('H:i:s') }}
                 </td>
@@ -81,13 +70,66 @@
             @endforeach
         </tbody>
     </table>
-    <p>Total Masuk: {{ $totalMasuk->hour }} Jam {{ $totalMasuk->minute }} Menit</p>
-    <p>Total Izin: {{ $totalIzin->hour }} Jam {{ $totalIzin->minute }} Menit</p>
-    <p>Total Telat: {{ $totalTelat->hour }} Jam {{ $totalTelat->minute }} Menit</p>
 
-    {{-- <a href="{{ route('exportView', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir]) }}">
-        <button>Export to Excel</button>
-    </a> --}}
+        <p>Total Masuk = {{$totalMasuk}}</p>
+        <p>Total Izin = {{$totalIzin}}</p>
+        <p>Total Telat = {{$totalTelat}}</p>
+
+      <div>
+        <canvas id="myChart" class="poppins" width="400" height="200"></canvas>
+      </div>
 
 </body>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun','Jul','Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+      datasets: [{
+    label: 'Masuk',
+    data: [
+        @foreach ($classifiedMasuk as $item)
+            {{ $item['total_masuk'] }},
+        @endforeach
+    ],
+    borderWidth: 1
+},{
+        label: 'Izin',
+        data: [
+           @foreach ($classifiedIzin as $item)
+            {{ $item['total_izin'] }},
+        @endforeach
+        ],
+        borderWidth: 1
+      },
+    {
+        label: 'Telat',
+        data: [
+          @foreach ($classifiedTelat as $item)
+            {{ $item['total_telat'] }},
+        @endforeach
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+{{-- @foreach ($classifiedMasuk as $item)
+   
+   {{ $item['total_masuk'] }}
+
+@endforeach
+ {{dd($classifiedMasuk,$classifiedIzin,$classifiedTelat);}} --}}
+
 </html>

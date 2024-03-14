@@ -57,10 +57,10 @@ class TaskKaryawanController extends Controller
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'judul' => 'required|string|max:255',
-            'tgl_task' => 'required|date',
+            'mulai' => 'required|date',
+            'selesai' => 'required|date',
             'status' => 'nullable|string',
         ]);
-
         $task = Task::findOrFail($id);
 
         $task->update($validatedData);

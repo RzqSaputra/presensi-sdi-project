@@ -11,6 +11,7 @@ use App\Http\Controllers\PM\ProfilPMController;
 use App\Http\Controllers\PM\JabatanController;
 use App\Http\Controllers\PM\PresensiPMController;
 use App\Http\Controllers\PM\CetakLaporanController;
+use App\Http\Controllers\CEO\CetakLaporanCEOController;
 use App\Http\Controllers\Karyawan\RiwayatPresensiController;
 use App\Http\Controllers\Karyawan\ProfilKaryawanController;
 use App\Http\Controllers\Karyawan\PresensiController;
@@ -20,8 +21,8 @@ use App\Http\Controllers\ExportController;
 use App\Models\Presensi;
 use Carbon\Carbon;
 
-// Route::get('/export-view/{tanggalAwal}/{tanggalAkhir}', [ExportController::class, 'exportView'])->name('exportView');
 Route::get('/export-test/{tanggalAwal}/{tanggalAkhir}/{id}', [ExportController::class, 'export'])->name('export.excell');
+Route::get('/export-pdf/{tanggalAwal}/{tanggalAkhir}/{id}', [ExportController::class, 'exportPdf'])->name('exportPdf');
 
     Route::get('/', function () {
         $today  = Carbon::today();
@@ -40,22 +41,34 @@ Route::get('/export-test/{tanggalAwal}/{tanggalAkhir}/{id}', [ExportController::
     })->name('Dashboard')->middleware('auth');
 
 
+
     /* ----------------------------------------------- A U T H  ----------------------------------------------- */
-    Route::get('login',     [AuthController::class, 'index'])->name('auth.index');
-    Route::post('login',    [AuthController::class, 'login'])->name('auth.login');
-    Route::get('daftar',    [AuthController::class, 'create'])->name('auth.daftar');
-    Route::post('daftar',   [AuthController::class, 'store'])->name('auth.store');
-    Route::post('logout',   [AuthController::class, 'logout'])->name('auth.logout');
+    Route::get('login',             [AuthController::class, 'index'])->name('auth.index');
+    Route::post('login',            [AuthController::class, 'login'])->name('auth.login');
+    Route::get('daftar',            [AuthController::class, 'create'])->name('auth.daftar');
+    Route::post('daftar',           [AuthController::class, 'store'])->name('auth.store');
+    Route::post('logout',           [AuthController::class, 'logout'])->name('auth.logout');
+    Route::get('forget',            [AuthController::class, 'forget'])->name('auth.forget');
+    Route::get('test',            [AuthController::class, 'test'])->name('test');
+    Route::post('forgetpassword',   [AuthController::class, 'forgetpassword'])->name('auth.forgetpassword');
+
+    Route::get('reset',                [AuthController::class, 'reset'])->name('auth.reset');
+    Route::post('resetpassword',       [AuthController::class, 'resetpassword'])->name('auth.resetpassword');
 
 
 
 Route::group(['middleware' => ['ceo']], function(){
-
     /* ----------------------------------------------- R O U T E - P R E S E N S I  ----------------------------------------------- */
     Route::prefix('dataPresensiCeo')->group(function() {
-        Route::get('dataPresensiCeo',                                [DataPresensiCeoController::class, 'index'])->name('dataPresensi.karyawan');
-        Route::get('dataPresensiCeo/{id}',                           [DataPresensiCeoController::class, 'detail'])->name('dataPresensiCeo.detail');
-        Route::get('dataPresensiCeo/{tanggalAwal}/{tanggalAkhir}',   [DataPresensiCeoController::class, 'cetak'])->name('cetak');
+        Route::get('dataPresensiCeo',      [DataPresensiCeoController::class, 'index'])->name('dataPresensiCeo');
+        Route::post('dataPresensiCeo',     [DataPresensiCeoController::class, 'create'])->name('dataPresensiCeo.create');
+        Route::post('update/{id}',         [DataPresensiCeoController::class, 'update'])->name('dataPresensiCeo.update');
+        Route::get('delete/{id}',          [DataPresensiCeoController::class, 'delete'])->name('dataPresensiCeo.delete');
+        Route::get('dataPresensiCeo/{id}', [DataPresensiCeoController::class, 'detail'])->name('dataPresensiCeo.detail');
+    });
+
+    Route::prefix('cetakceo')->group(function() {
+        Route::get('cetaklaporan/{tanggalAwal}/{tanggalAkhir}', [CetakLaporanCEOController::class, 'index'])->name('cetakLaporanCeo');
     });
 });
 

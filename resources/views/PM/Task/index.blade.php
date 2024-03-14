@@ -141,14 +141,17 @@
                                                 </span>
                                                 @endif
                                             </td>
-
+                                            
                                             <td class="text-sm text-center">
+                                                @if ($p->status!=2)
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#selesaiTask-{{ $p->id }}">
                                                     <button class="btn btn-success">
                                                         <i class="fa fa-check"></i>
                                                     </button>
-                                                </a>
+                                                </a>   
+                                                @endif
+                                                
                                                 <a href="{{ route('taskKaryawan.detail', ['id' => $p->id]) }}">
                                                     <button class="btn btn-primary">
                                                         <i class="fa fa-info"></i>
@@ -237,15 +240,27 @@
                             <div class="modal-body">
                                 <form action="{{ route('taskKaryawan.update', ['id' => $p->id]) }}" method="POST">
                                     @csrf
-                                    <div class='mb-3'>
+                                    {{-- <div class='mb-3'>
                                         <label for="user_id" class="form-label">Nama Karyawan</label>
                                         <select name="user_id" id="user_id" class="form-select" required>
                                             @foreach ($user->where('id', '>', 1) as $user)
-                                            <option value="{{ $user->id }}" @if($user->id == optional($p->user)->id)
+                                            <option value="{{ $p->user }}" @if($user->id == optional($p->user)->id)
                                                 selected @endif>{{ $user->karyawan->nama }}</option>
                                             @endforeach
                                         </select>
+                                    </div> --}}
+
+                                    <div class='mb-3'>
+                                        <label for="user_id" class="form-label">Nama Karyawan</label>
+                                        <select name="user_id" id="user_id" class="form-select" required>
+                                            @foreach ($user->where('id', '>', 1) as $singleUser)
+                                                <option value="{{ $singleUser->id }}" @if($singleUser->id == optional($p->user)->id) selected @endif>
+                                                    {{ $singleUser->karyawan->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
 
                                     <div class='mb-3'>
                                         <label for="judul" class="form-label">Judul</label>
@@ -254,9 +269,15 @@
                                     </div>
 
                                     <div class='mb-3'>
-                                        <label for="tgl_task" class="form-label">Tanggal</label>
-                                        <input type="date" name="tgl_task" id="tgl_task" class="form-control" required
-                                            value="{{ old('tgl_task', $p->tgl_task) }}">
+                                        <label for="mulai" class="form-label">Mulai</label>
+                                        <input type="date" name="mulai" id="mulai" class="form-control" required
+                                            value="{{ old('mulai', $p->mulai) }}">
+                                    </div>
+
+                                    <div class='mb-3'>
+                                        <label for="selesai" class="form-label">Selesai</label>
+                                        <input type="date" name="selesai" id="selesai" class="form-control" required
+                                            value="{{ old('selesai', $p->selesai) }}">
                                     </div>
 
                                     <div class='mb-3'>

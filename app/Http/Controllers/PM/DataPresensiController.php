@@ -105,6 +105,4 @@ class DataPresensiController extends Controller
             'title'  => 'Detail Presensi'
         ]);
     }
-
-    
 }

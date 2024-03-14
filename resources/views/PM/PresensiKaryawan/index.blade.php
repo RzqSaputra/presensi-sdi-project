@@ -81,7 +81,7 @@
                                                 'tanggalAwal' => $tanggalAwal,
                                                 'tanggalAkhir' => $tanggalAkhir,
                                                 'search' => request('search'),
-                                            ]) }}"><i class="fa fa-print"></i>   PDF</a>
+                                            ]) }}"><i class="fa fa-print"></i>   Export</a>
 
                                             {{-- <button id="exportExcel" class="btn btn-success" style="margin-left: 6px">
                                                 <i class="far fa-file-excel"></i> EXCEL

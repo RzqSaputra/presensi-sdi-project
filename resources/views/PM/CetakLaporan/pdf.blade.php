@@ -1,3 +1,4 @@
+<!-- resources/views/CetakLaporan/index.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,12 +9,7 @@
 </head>
 <body>
     <h1>Laporan Presensi</h1>
-   <a target="_blank" href="{{ route('export.excell', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Excel</button></a>
-   <a target="_blank" href="{{ route('exportPdf', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir,'id'=>$id]) }}"><button>Pdf</button></a>
-
-
-    <p>Tanggal Awal: {{ $tanggalAwal }}</p>
-    <p>Tanggal Akhir: {{ $tanggalAkhir }}</p>
+    <p>Rekap Data Presensi dari tanggal {{$tanggalAwal}} - {{$tanggalAkhir}}</p>
     <table border="2px solid black" id="example" class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -27,23 +23,15 @@
             </tr>
         </thead>
         <tbody>
-            @php
-            $totalMasuk = Carbon\Carbon::createFromTime(0, 0, 0);
-            $totalIzin = Carbon\Carbon::createFromTime(0, 0, 0);
-            $totalTelat = Carbon\Carbon::createFromTime(0, 0, 0);
-            @endphp
-
-            @foreach($presensi as $key => $p)
+           @foreach($presensi as $key => $p)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $p->tgl_presensi }}</td>
                 <td>{{ $p->user->karyawan->nama }}</td>
-                <td>
+                 <td>
                     @php
                     $waktuKerja = $p->total_masuk ? Carbon\Carbon::parse($p->total_masuk) :
                     Carbon\Carbon::createFromTime(0, 0, 0);
-                    $totalMasuk =
-                    $totalMasuk->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
                     {{ $waktuKerja->format('H:i:s') }}
                 </td>
@@ -51,8 +39,6 @@
                     @php
                     $waktuKerja = $p->total_izin ? Carbon\Carbon::parse($p->total_izin) :
                     Carbon\Carbon::createFromTime(0, 0, 0);
-                    $totalIzin =
-                    $totalIzin->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
                     {{ $waktuKerja->format('H:i:s') }}
                 </td>
@@ -60,8 +46,6 @@
                     @php
                     $waktuKerja = $p->total_telat ? Carbon\Carbon::parse($p->total_telat) :
                     Carbon\Carbon::createFromTime(0, 0, 0);
-                    $totalTelat =
-                    $totalTelat->addHours($waktuKerja->hour)->addMinutes($waktuKerja->minute)->addSeconds($waktuKerja->second);
                     @endphp
                     {{ $waktuKerja->format('H:i:s') }}
                 </td>
@@ -82,13 +66,8 @@
             @endforeach
         </tbody>
     </table>
-    <p>Total Masuk: {{ $totalMasuk->hour }} Jam {{ $totalMasuk->minute }} Menit</p>
-    <p>Total Izin: {{ $totalIzin->hour }} Jam {{ $totalIzin->minute }} Menit</p>
-    <p>Total Telat: {{ $totalTelat->hour }} Jam {{ $totalTelat->minute }} Menit</p>
-
-    {{-- <a href="{{ route('exportView', ['tanggalAwal' => $tanggalAwal, 'tanggalAkhir' => $tanggalAkhir]) }}">
-        <button>Export to Excel</button>
-    </a> --}}
-
+        <p>Total Masuk = {{$totalMasuk}}</p>
+        <p>Total Izin = {{$totalIzin}}</p>
+        <p>Total Telat = {{$totalTelat}}</p>
 </body>
 </html>

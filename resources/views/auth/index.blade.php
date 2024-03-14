@@ -12,8 +12,8 @@
                         <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
                             <div class="card card-plain">
                                 <div class="card-header pb-0 text-start">
-                                    <h4 class="font-weight-bolder">Masuk</h4>
-                                    <p class="mb-0">Masukkan email dan password anda!</p>
+                                    <h4 class="font-weight-bolder">Login</h4>
+                                    <p class="mb-0">Enter your email and password!</p>
                                 </div>
 
                                 <div class="card-body">
@@ -39,14 +39,20 @@
                                             <input type="email" class="form-control form-control-lg" placeholder="Email"
                                                 aria-label="Email" name="email" id="email">
                                         </div>
+
                                         <div class="mb-3">
                                             <input type="password" class="form-control form-control-lg"
                                                 placeholder="Password" aria-label="Password" name="password"
                                                 id="password">
                                         </div>
+
                                         <div class="text-center">
                                             <button type="submit"
                                                 class="btn btn-lg btn-primary btn-lg w-100 mt-3 mb-0">Masuk</button>
+                                        </div>
+
+                                        <div class="text-center mt-3">
+                                            <a href="{{ route('auth.forget') }}">Forget Password?</a>
                                         </div>
                                     </form>
                                 </div>

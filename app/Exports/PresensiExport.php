@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PresensiExport implements FromView
 {
@@ -23,17 +24,34 @@ class PresensiExport implements FromView
  }    
     public function view(): View
     {
-                $presensi = Presensi::whereBetween('tgl_presensi', [$this->tglAwal, $this->tglAkhir])
-        ->where('user_id',$this->id)
-    ->get();
-        $presensi = Presensi::where("user_id",$this->id)->get();
+        $totalMasuk = Presensi::whereBetween('tgl_presensi', [$this->tglAwal, $this->tglAkhir])
+            ->select(DB::raw("SEC_TO_TIME(SUM(TIME_TO_SEC(total_masuk))) as total_masuk"))
+            ->first()
+            ->total_masuk;
+
+        $totalIzin = Presensi::whereBetween('tgl_presensi', [$this->tglAwal, $this->tglAkhir])
+            ->select(DB::raw("SEC_TO_TIME(SUM(TIME_TO_SEC(total_izin))) as total_izin"))
+            ->first()
+            ->total_izin;
+
+        $totalTelat = Presensi::whereBetween('tgl_presensi', [$this->tglAwal, $this->tglAkhir])
+            ->select(DB::raw("SEC_TO_TIME(SUM(TIME_TO_SEC(total_telat))) as total_telat"))
+            ->first()
+            ->total_telat;
+
+        $presensi = Presensi::whereBetween('tgl_presensi', [$this->tglAwal, $this->tglAkhir])
+            ->where('user_id',$this->id)
+            ->get();
+
+
         return view('PM.CetakLaporan.excell', [
             'presensi' => $presensi,
-              'tanggalAwal' => $this->tglAwal,
-        'tanggalAkhir' => $this->tglAkhir,
+            'tanggalAwal' => $this->tglAwal,
+            'tanggalAkhir' => $this->tglAkhir,
+            'totalMasuk' => $totalMasuk,
+            'totalIzin' => $totalIzin,
+            'totalTelat' => $totalTelat,
         ]);
     }
 
-
-    
 }
